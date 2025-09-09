@@ -1,5 +1,6 @@
 import React from 'react';
 import { User, LogOut, Sun, Moon } from 'lucide-react';
+import logo from "/logo-mentify.jpg";
 
 interface NavbarProps {
   isDarkMode: boolean;
@@ -20,7 +21,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
             <div className="flex-shrink-0">
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                 <img 
-                  src="/public/logo mentify.jpg" 
+                  src={logo} 
                   alt="Mentify Logo" 
                   className="w-8 h-8 rounded-md object-cover"
                   onError={(e) => {
