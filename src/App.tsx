@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import History from './components/History';
 import MainContent from './components/MainContent';
-import VoiceTextAgent from './components/VoiceTextAgent';
+import ChatBot from './components/ChatBot';
 
 interface HistoryItem {
   id: string;
@@ -91,7 +91,7 @@ function App() {
         />
       </div>
 
-      <VoiceTextAgent 
+      <ChatBot 
         isDarkMode={isDarkMode}
         selectedModel={selectedModel}
         onNewInteraction={handleNewInteraction}
