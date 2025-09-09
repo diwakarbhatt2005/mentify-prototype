@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import History from './components/History';
-import MainContent from './components/MainContent';
-import ChatBot from './components/ChatBot';
+import ChatInterface from './components/ChatInterface';
 
 interface HistoryItem {
   id: string;
@@ -85,17 +84,12 @@ function App() {
           onClearHistory={handleClearHistory}
         />
         
-        <MainContent 
+        <ChatInterface 
           isDarkMode={isDarkMode}
           selectedModel={selectedModel}
+          onNewInteraction={handleNewInteraction}
         />
       </div>
-
-      <ChatBot 
-        isDarkMode={isDarkMode}
-        selectedModel={selectedModel}
-        onNewInteraction={handleNewInteraction}
-      />
     </div>
   );
 }
