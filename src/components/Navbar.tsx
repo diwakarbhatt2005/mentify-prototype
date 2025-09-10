@@ -89,22 +89,22 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
 
   return (
     <nav className={`${isDarkMode ? 'bg-gray-900/95 border-gray-700/50' : 'bg-white/95 border-gray-200/50'} border-b backdrop-blur-xl transition-all duration-300 sticky top-0 z-50`}>
-      <div className="w-full px-8 lg:px-16">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-16">
         <div className="flex justify-between items-center h-16">
           {/* Enhanced Logo Section */}
           <div className="flex items-center space-x-4">
             <div className="flex-shrink-0">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-gradient-to-br from-blue-600 to-purple-600' : 'bg-gradient-to-br from-blue-500 to-purple-500'}`}>
+              <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-105 overflow-hidden">
                 <img 
                   src={logo} 
                   alt="Mentify Logo" 
-                  className="w-6 h-6 rounded-lg object-cover"
+                  className="w-full h-full object-cover"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.nextElementSibling!.style.display = 'block';
                   }}
                 />
-                <div className="w-6 h-6 rounded-lg flex items-center justify-center text-white font-bold text-sm hidden">
+                <div className={`w-full h-full rounded-full flex items-center justify-center font-bold text-sm hidden ${isDarkMode ? 'bg-gradient-to-br from-blue-600 to-purple-600 text-white' : 'bg-gradient-to-br from-blue-500 to-purple-500 text-white'}`}>
                   M
                 </div>
               </div>
@@ -120,7 +120,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
           </div>
 
           {/* Enhanced Model Selection Dropdown */}
-          <div className="flex-1 max-w-sm mx-8" ref={dropdownRef}>
+          <div className="flex-1 max-w-sm mx-4 lg:mx-8" ref={dropdownRef}>
             <div className="relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -135,11 +135,14 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
                       <currentBuddy.icon size={16} className={currentBuddy.color} />
                     </div>
-                    <div className="text-left">
+                    <div className="text-left hidden sm:block">
                       <div className="font-semibold text-sm">{currentBuddy.name}</div>
                       <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         {currentBuddy.description}
                       </div>
+                    </div>
+                    <div className="text-left sm:hidden">
+                      <div className="font-semibold text-sm">{currentBuddy.name}</div>
                     </div>
                   </div>
                   <ChevronDown 
@@ -224,7 +227,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
           </div>
 
           {/* Enhanced Navigation Items */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 lg:space-x-3">
             {/* Profile */}
             <button className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
               isDarkMode 

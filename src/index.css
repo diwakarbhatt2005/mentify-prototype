@@ -88,6 +88,27 @@ textarea:focus {
   -webkit-backdrop-filter: blur(24px);
 }
 
+/* Mobile responsive improvements */
+@media (max-width: 640px) {
+  .max-w-[80%] {
+    max-width: 90%;
+  }
+  
+  .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-left: 0.75rem;
+  }
+  
+  .p-6 {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid.sm\\:grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Enhanced gradient text */
 .bg-gradient-to-r {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
@@ -122,8 +143,24 @@ textarea:focus {
   transform: scale(1.05);
 }
 
+.hover\:scale-\[1\.02\]:hover {
+  transform: scale(1.02);
+}
+
 .hover\:scale-110:hover {
   transform: scale(1.1);
+}
+
+/* Improved mobile touch targets */
+@media (max-width: 640px) {
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .p-2 {
+    padding: 0.625rem;
+  }
 }
 
 /* Dark mode support */
@@ -159,6 +196,14 @@ button:active {
 /* Smooth height transitions for textarea */
 textarea {
   transition: height 0.2s ease;
+  min-height: 20px;
+}
+
+/* Better mobile textarea handling */
+@media (max-width: 640px) {
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
 }
 
 /* Custom shadow for floating elements */
@@ -168,4 +213,26 @@ textarea {
 
 .dark .shadow-2xl {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Improved scrolling on mobile */
+@media (max-width: 768px) {
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Better spacing for mobile */
+@media (max-width: 640px) {
+  .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem;
+  }
+  
+  .mb-8 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .p-4 {
+    padding: 0.75rem;
+  }
 }

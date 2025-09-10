@@ -112,14 +112,35 @@ function App() {
         setSelectedModel={setSelectedModel}
       />
       
-      <div className="flex h-[calc(100vh-4rem)]">
+      <div className="flex h-[calc(100vh-4rem)] relative">
         <History 
           isDarkMode={isDarkMode}
           history={history}
           onClearHistory={handleClearHistory}
         />
         
-        <ChatInterface 
+        <div className="flex-1 flex flex-col">
+          <ChatInterface 
+            isDarkMode={isDarkMode}
+            selectedModel={selectedModel}
+            onNewInteraction={handleNewInteraction}
+          />
+        </div>
+        
+        {/* Mobile History Toggle - Future Enhancement */}
+        {/* <div className="lg:hidden fixed bottom-20 right-4 z-40">
+          <button className={`p-3 rounded-full shadow-lg ${
+            isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
+          }`}>
+            <Clock size={20} />
+          </button>
+        </div> */}
+      </div>
+    </div>
+  );
+}
+
+export default App;
           isDarkMode={isDarkMode}
           selectedModel={selectedModel}
           onNewInteraction={handleNewInteraction}

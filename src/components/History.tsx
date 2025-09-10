@@ -17,8 +17,8 @@ interface HistoryProps {
 
 const History: React.FC<HistoryProps> = ({ isDarkMode, history, onClearHistory }) => {
   return (
-    <div className={`w-80 h-full ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-r transition-colors duration-300 flex flex-col`}>
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+    <div className={`w-80 h-full ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-r transition-colors duration-300 flex flex-col hidden lg:flex`}>
+      <div className={`p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
         <div className="flex items-center justify-between">
           <h2 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
             History
