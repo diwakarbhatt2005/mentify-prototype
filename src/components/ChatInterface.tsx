@@ -169,7 +169,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
   return (
     <div className="flex-1 flex flex-col h-full">
       {/* Header */}
-      <div className={`flex items-center justify-between p-4 sm:p-6 border-b ${
+      <div className={`flex items-center justify-between p-4 sm:p-6 border-b h-[73px] ${
         isDarkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'
       }`}>
         <div className="flex items-center space-x-3">
@@ -182,7 +182,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
             <h2 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               {selectedModel}
             </h2>
-            <div className={`flex items-center space-x-1 border-b pb-1 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+            <div className={`flex items-center space-x-1`}>
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                 Online
@@ -227,8 +227,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
       <div className="flex-1 overflow-y-auto flex items-center justify-center">
         {messages.length === 0 ? (
           // Welcome Screen
-          <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-8 ${
+          <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 min-h-full">
+            <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 ${
               isDarkMode ? 'bg-gray-800' : 'bg-gray-100'
             }`}>
               <Bot className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} size={32} />
