@@ -21,6 +21,7 @@ interface Buddy {
 
 const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel, setSelectedModel }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const buddies: Buddy[] = [
@@ -88,13 +89,13 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
   };
 
   return (
-    <nav className={`${isDarkMode ? 'bg-gray-900/95 border-gray-700/50' : 'bg-white/95 border-gray-200/50'} border-b backdrop-blur-xl transition-all duration-300 sticky top-0 z-50`}>
+    <nav className={`${isDarkMode ? 'bg-gray-900/95 border-gray-700/50' : 'bg-white/95 border-gray-200/50'} border-b backdrop-blur-xl transition-all duration-300 sticky top-0 z-50 safe-area-inset-top`}>
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-16">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Enhanced Logo Section */}
           <div className="flex items-center space-x-4">
             <div className="flex-shrink-0">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-105 overflow-hidden">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-105 overflow-hidden">
                 <img 
                   src={logo} 
                   alt="Mentify Logo" 
@@ -110,43 +111,43 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
               </div>
             </div>
             <div>
-              <h1 className={`text-xl font-bold bg-gradient-to-r ${isDarkMode ? 'from-white to-gray-300' : 'from-gray-900 to-gray-600'} bg-clip-text text-transparent`}>
+              <h1 className={`text-lg sm:text-xl font-bold bg-gradient-to-r ${isDarkMode ? 'from-white to-gray-300' : 'from-gray-900 to-gray-600'} bg-clip-text text-transparent`}>
                 Mentify
               </h1>
-              <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              <p className={`text-xs hidden sm:block ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                 AI Platform
               </p>
             </div>
           </div>
 
           {/* Enhanced Model Selection Dropdown */}
-          <div className="flex-1 max-w-sm mx-4 lg:mx-8" ref={dropdownRef}>
+          <div className="flex-1 max-w-xs sm:max-w-sm mx-2 sm:mx-4 lg:mx-8" ref={dropdownRef}>
             <div className="relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`w-full px-4 py-2.5 rounded-xl border transition-all duration-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
+                className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border transition-all duration-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
                   isDarkMode 
                     ? 'bg-gray-800/80 border-gray-600 text-white hover:bg-gray-700/80 hover:border-gray-500' 
                     : 'bg-white/80 border-gray-300 text-gray-900 hover:bg-gray-50/80 hover:border-gray-400'
                 } ${isDropdownOpen ? 'ring-2 ring-blue-500/20 border-blue-500' : ''}`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                      <currentBuddy.icon size={16} className={currentBuddy.color} />
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                      <currentBuddy.icon size={14} className={currentBuddy.color} />
                     </div>
                     <div className="text-left hidden sm:block">
-                      <div className="font-semibold text-sm">{currentBuddy.name}</div>
+                      <div className="font-semibold text-xs sm:text-sm">{currentBuddy.name}</div>
                       <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         {currentBuddy.description}
                       </div>
                     </div>
                     <div className="text-left sm:hidden">
-                      <div className="font-semibold text-sm">{currentBuddy.name}</div>
+                      <div className="font-semibold text-xs">{currentBuddy.name}</div>
                     </div>
                   </div>
                   <ChevronDown 
-                    size={16} 
+                    size={14} 
                     className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''} ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} 
                   />
                 </div>
@@ -227,35 +228,35 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
           </div>
 
           {/* Enhanced Navigation Items */}
-          <div className="flex items-center space-x-2 lg:space-x-3">
+          <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
             {/* Profile */}
-            <button className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+            <button className={`p-2 sm:p-2 rounded-lg transition-all duration-200 hover:scale-105 min-h-[44px] min-w-[44px] flex items-center justify-center ${
               isDarkMode 
                 ? 'text-gray-300 hover:text-white hover:bg-gray-800/80' 
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
             }`}>
-              <User size={18} />
+              <User size={16} className="sm:w-[18px] sm:h-[18px]" />
             </button>
 
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+              className={`p-2 sm:p-2 rounded-lg transition-all duration-200 hover:scale-105 min-h-[44px] min-w-[44px] flex items-center justify-center ${
                 isDarkMode 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/80' 
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
               }`}
             >
-              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+              {isDarkMode ? <Sun size={16} className="sm:w-[18px] sm:h-[18px]" /> : <Moon size={16} className="sm:w-[18px] sm:h-[18px]" />}
             </button>
 
             {/* Logout */}
-            <button className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+            <button className={`p-2 sm:p-2 rounded-lg transition-all duration-200 hover:scale-105 min-h-[44px] min-w-[44px] flex items-center justify-center ${
               isDarkMode 
                 ? 'text-gray-300 hover:text-white hover:bg-gray-800/80' 
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
             }`}>
-              <LogOut size={18} />
+              <LogOut size={16} className="sm:w-[18px] sm:h-[18px]" />
             </button>
           </div>
         </div>

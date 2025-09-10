@@ -20,7 +20,13 @@ body {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
+}
+
+@media (min-width: 640px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
 }
 
 ::-webkit-scrollbar-track {
@@ -90,22 +96,71 @@ textarea:focus {
 
 /* Mobile responsive improvements */
 @media (max-width: 640px) {
-  .max-w-[80%] {
+  .max-w-[85%] {
     max-width: 90%;
   }
   
-  .space-x-4 > :not([hidden]) ~ :not([hidden]) {
-    margin-left: 0.75rem;
+  .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-left: 0.5rem;
   }
   
-  .p-6 {
+  .p-3 {
     padding: 1rem;
+  }
+  
+  /* Ensure proper touch targets */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better textarea handling */
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    -webkit-appearance: none;
+  }
+  
+  /* Safe area support */
+  .safe-area-inset-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 
 @media (max-width: 768px) {
   .grid.sm\\:grid-cols-2 {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Dynamic viewport height support */
+.min-h-\[100dvh\] {
+  min-height: 100dvh;
+}
+
+.h-\[calc\(100dvh-3\.5rem\)\] {
+  height: calc(100dvh - 3.5rem);
+}
+
+.h-\[calc\(100dvh-4rem\)\] {
+  height: calc(100dvh - 4rem);
+}
+
+/* Fallback for browsers that don't support dvh */
+@supports not (height: 100dvh) {
+  .min-h-\[100dvh\] {
+    min-height: 100vh;
+  }
+  
+  .h-\[calc\(100dvh-3\.5rem\)\] {
+    height: calc(100vh - 3.5rem);
+  }
+  
+  .h-\[calc\(100dvh-4rem\)\] {
+    height: calc(100vh - 4rem);
   }
 }
 
@@ -153,13 +208,32 @@ textarea:focus {
 
 /* Improved mobile touch targets */
 @media (max-width: 640px) {
-  button {
-    min-height: 44px;
-    min-width: 44px;
+  /* Ensure all interactive elements meet accessibility guidelines */
+  button, 
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
   }
   
-  .p-2 {
-    padding: 0.625rem;
+  /* Better spacing for mobile */
+  .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.75rem;
+  }
+  
+  /* Improved padding for mobile */
+  .p-4 {
+    padding: 0.75rem;
+  }
+  
+  /* Better text sizing */
+  .text-xs {
+    font-size: 0.75rem;
+  }
+  
+  .text-sm {
+    font-size: 0.875rem;
   }
 }
 
@@ -200,9 +274,76 @@ textarea {
 }
 
 /* Better mobile textarea handling */
-@media (max-width: 640px) {
+textarea {
+  font-size: 16px; /* Prevents zoom on iOS */
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+@media (min-width: 640px) {
   textarea {
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 14px;
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+body {
+  overflow-x: hidden;
+}
+
+/* Better mobile viewport handling */
+@media (max-width: 640px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Improved focus states for mobile */
+@media (max-width: 640px) {
+  button:focus,
+  input:focus,
+  textarea:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+}
+
+/* Better mobile scrolling */
+@media (max-width: 768px) {
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Mobile-specific animations */
+@media (max-width: 640px) {
+  .transition-all {
+    transition-duration: 150ms;
+  }
+  
+  .hover\:scale-105:hover {
+    transform: none; /* Disable hover effects on mobile */
+  }
+  
+  .hover\:scale-\[1\.02\]:hover {
+    transform: none;
+  }
+}
+
+/* Active states for mobile */
+@media (max-width: 640px) {
+  .active\:scale-\[0\.98\]:active {
+    transform: scale(0.98);
+  }
+  
+  button:active {
+    transform: scale(0.95);
   }
 }
 
