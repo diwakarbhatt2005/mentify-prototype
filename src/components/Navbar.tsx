@@ -1,5 +1,5 @@
-import React from 'react';
-import { User, LogOut, Sun, Moon, Lock, Bot, Zap, Brain, Sparkles } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { User, LogOut, Sun, Moon, Lock, Bot, Zap, Brain, Sparkles, ChevronDown, Check } from 'lucide-react';
 import logo from "/logo-mentify.jpg";
 
 interface NavbarProps {
@@ -15,113 +15,244 @@ interface Buddy {
   icon: React.ComponentType<any>;
   isLocked: boolean;
   price?: string;
+  description: string;
+  color: string;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel, setSelectedModel }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const buddies: Buddy[] = [
-    { id: 'mentify-1', name: 'Mentify 1', icon: Bot, isLocked: false },
-    { id: 'mentify-2', name: 'Mentify 2', icon: Zap, isLocked: false },
-    { id: 'mentify-3', name: 'Mentify 3', icon: Brain, isLocked: true, price: '$9.99' },
-    { id: 'mentify-4', name: 'Mentify 4', icon: Sparkles, isLocked: true, price: '$14.99' },
+    { 
+      id: 'mentify-1', 
+      name: 'Mentify 1', 
+      icon: Bot, 
+      isLocked: false, 
+      description: 'General purpose AI assistant',
+      color: 'text-blue-500'
+    },
+    { 
+      id: 'mentify-2', 
+      name: 'Mentify 2', 
+      icon: Zap, 
+      isLocked: false, 
+      description: 'Fast and efficient responses',
+      color: 'text-yellow-500'
+    },
+    { 
+      id: 'mentify-3', 
+      name: 'Mentify 3', 
+      icon: Brain, 
+      isLocked: true, 
+      price: '$9.99', 
+      description: 'Advanced reasoning and analysis',
+      color: 'text-purple-500'
+    },
+    { 
+      id: 'mentify-4', 
+      name: 'Mentify 4', 
+      icon: Sparkles, 
+      isLocked: true, 
+      price: '$14.99', 
+      description: 'Creative and innovative solutions',
+      color: 'text-pink-500'
+    },
   ];
 
+  const currentBuddy = buddies.find(b => b.name === selectedModel) || buddies[0];
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleBuddySelect = (buddy: Buddy) => {
+    if (!buddy.isLocked) {
+      setSelectedModel(buddy.name);
+      setIsDropdownOpen(false);
+    }
+  };
+
+  const handleUnlockBuddy = (buddy: Buddy, e: React.MouseEvent) => {
+    e.stopPropagation();
+    // In a real app, this would open a payment modal
+    alert(`Unlock ${buddy.name} for ${buddy.price}?`);
+  };
+
   return (
-    <nav className={`${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-b transition-colors duration-300`}>
-      <div className="w-full px-6 lg:px-12">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo Section */}
-          <div className="flex items-center">
+    <nav className={`${isDarkMode ? 'bg-gray-900/95 border-gray-700/50' : 'bg-white/95 border-gray-200/50'} border-b backdrop-blur-xl transition-all duration-300 sticky top-0 z-50`}>
+      <div className="w-full px-8 lg:px-16">
+        <div className="flex justify-between items-center h-18">
+          {/* Enhanced Logo Section */}
+          <div className="flex items-center space-x-4">
             <div className="flex-shrink-0">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-gradient-to-br from-blue-600 to-purple-600' : 'bg-gradient-to-br from-blue-500 to-purple-500'}`}>
                 <img 
                   src={logo} 
                   alt="Mentify Logo" 
-                  className="w-8 h-8 rounded-md object-cover"
+                  className="w-8 h-8 rounded-lg object-cover"
                   onError={(e) => {
-                    // Fallback if image doesn't load
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.nextElementSibling!.style.display = 'block';
                   }}
                 />
-                <div className={`w-8 h-8 rounded-md ${isDarkMode ? 'bg-blue-600' : 'bg-blue-500'} flex items-center justify-center text-white font-bold text-sm hidden`}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-lg hidden">
                   M
                 </div>
               </div>
             </div>
-            <div className="ml-3">
-              <h1 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            <div>
+              <h1 className={`text-2xl font-bold bg-gradient-to-r ${isDarkMode ? 'from-white to-gray-300' : 'from-gray-900 to-gray-600'} bg-clip-text text-transparent`}>
                 Mentify
               </h1>
+              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                AI Platform
+              </p>
             </div>
           </div>
 
-          {/* Model Selection Dropdown */}
-          <div className="flex-1 max-w-sm mx-8">
+          {/* Enhanced Model Selection Dropdown */}
+          <div className="flex-1 max-w-md mx-12" ref={dropdownRef}>
             <div className="relative">
-              <select
-                value={selectedModel}
-                onChange={(e) => setSelectedModel(e.target.value)}
-                className={`w-full px-4 py-2 rounded-lg border transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none ${
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className={`w-full px-6 py-4 rounded-2xl border-2 transition-all duration-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 ${
                   isDarkMode 
-                    ? 'bg-gray-800 border-gray-600 text-white hover:bg-gray-700' 
-                    : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50'
-                }`}
+                    ? 'bg-gray-800/80 border-gray-600 text-white hover:bg-gray-700/80 hover:border-gray-500' 
+                    : 'bg-white/80 border-gray-300 text-gray-900 hover:bg-gray-50/80 hover:border-gray-400'
+                } ${isDropdownOpen ? 'ring-4 ring-blue-500/20 border-blue-500' : ''}`}
               >
-                {buddies.map((buddy) => (
-                  <option 
-                    key={buddy.id} 
-                    value={buddy.name}
-                    disabled={buddy.isLocked}
-                  >
-                    {buddy.name} {buddy.isLocked ? '🔒' : ''}
-                  </option>
-                ))}
-              </select>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                      <currentBuddy.icon size={20} className={currentBuddy.color} />
+                    </div>
+                    <div className="text-left">
+                      <div className="font-semibold text-lg">{currentBuddy.name}</div>
+                      <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {currentBuddy.description}
+                      </div>
+                    </div>
+                  </div>
+                  <ChevronDown 
+                    size={20} 
+                    className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''} ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} 
+                  />
+                </div>
+              </button>
               
-              {/* Custom dropdown content for better styling */}
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                {(() => {
-                  const currentBuddy = buddies.find(b => b.name === selectedModel);
-                  if (currentBuddy) {
-                    const IconComponent = currentBuddy.icon;
-                    return <IconComponent size={16} className={isDarkMode ? 'text-gray-400' : 'text-gray-500'} />;
-                  }
-                  return null;
-                })()}
-              </div>
+              {/* Enhanced Dropdown Menu */}
+              {isDropdownOpen && (
+                <div className={`absolute top-full left-0 right-0 mt-2 rounded-2xl border-2 shadow-2xl backdrop-blur-xl z-50 overflow-hidden ${
+                  isDarkMode 
+                    ? 'bg-gray-800/95 border-gray-600' 
+                    : 'bg-white/95 border-gray-200'
+                }`}>
+                  <div className="p-2">
+                    {buddies.map((buddy) => {
+                      const IconComponent = buddy.icon;
+                      const isSelected = buddy.name === selectedModel;
+                      
+                      return (
+                        <div
+                          key={buddy.id}
+                          onClick={() => handleBuddySelect(buddy)}
+                          className={`relative p-4 rounded-xl cursor-pointer transition-all duration-200 group ${
+                            buddy.isLocked 
+                              ? isDarkMode ? 'opacity-60 hover:opacity-80' : 'opacity-60 hover:opacity-80'
+                              : isDarkMode 
+                                ? 'hover:bg-gray-700/80' 
+                                : 'hover:bg-gray-50/80'
+                          } ${isSelected && !buddy.isLocked ? (isDarkMode ? 'bg-blue-600/20 border border-blue-500/50' : 'bg-blue-50/80 border border-blue-200') : ''}`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-4">
+                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                                buddy.isLocked 
+                                  ? isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                                  : isDarkMode ? 'bg-gray-700 group-hover:bg-gray-600' : 'bg-gray-100 group-hover:bg-white'
+                              }`}>
+                                {buddy.isLocked ? (
+                                  <Lock size={20} className="text-gray-400" />
+                                ) : (
+                                  <IconComponent size={20} className={buddy.color} />
+                                )}
+                              </div>
+                              <div>
+                                <div className={`font-semibold text-lg flex items-center space-x-2 ${
+                                  isDarkMode ? 'text-white' : 'text-gray-900'
+                                }`}>
+                                  <span>{buddy.name}</span>
+                                  {isSelected && !buddy.isLocked && (
+                                    <Check size={16} className="text-blue-500" />
+                                  )}
+                                </div>
+                                <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  {buddy.description}
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {buddy.isLocked && (
+                              <button
+                                onClick={(e) => handleUnlockBuddy(buddy, e)}
+                                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
+                                  isDarkMode 
+                                    ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                                    : 'bg-blue-500 hover:bg-blue-600 text-white'
+                                } shadow-lg hover:shadow-xl`}
+                              >
+                                Unlock {buddy.price}
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Navigation Items */}
-          <div className="flex items-center space-x-4">
+          {/* Enhanced Navigation Items */}
+          <div className="flex items-center space-x-3">
             {/* Profile */}
-            <button className={`p-2 rounded-lg transition-colors duration-200 ${
+            <button className={`p-3 rounded-xl transition-all duration-200 hover:scale-105 ${
               isDarkMode 
-                ? 'text-gray-300 hover:text-white hover:bg-gray-800' 
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                ? 'text-gray-300 hover:text-white hover:bg-gray-800/80' 
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
             }`}>
-              <User size={20} />
+              <User size={22} />
             </button>
 
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className={`p-2 rounded-lg transition-colors duration-200 ${
+              className={`p-3 rounded-xl transition-all duration-200 hover:scale-105 ${
                 isDarkMode 
-                  ? 'text-gray-300 hover:text-white hover:bg-gray-800' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  ? 'text-gray-300 hover:text-white hover:bg-gray-800/80' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
               }`}
             >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {isDarkMode ? <Sun size={22} /> : <Moon size={22} />}
             </button>
 
             {/* Logout */}
-            <button className={`p-2 rounded-lg transition-colors duration-200 ${
+            <button className={`p-3 rounded-xl transition-all duration-200 hover:scale-105 ${
               isDarkMode 
-                ? 'text-gray-300 hover:text-white hover:bg-gray-800' 
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                ? 'text-gray-300 hover:text-white hover:bg-gray-800/80' 
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
             }`}>
-              <LogOut size={20} />
+              <LogOut size={22} />
             </button>
           </div>
         </div>
