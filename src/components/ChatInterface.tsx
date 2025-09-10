@@ -228,13 +228,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
         {messages.length === 0 ? (
           // Welcome Screen
           <div className="flex flex-col items-center justify-center h-full p-4 sm:p-6 text-center">
-            <div className="mb-4">
-              <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center ${
-                isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-              } shadow-lg`}>
-                <Bot className={`w-8 h-8 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
-              </div>
-            </div>
             <h1 className={`text-2xl sm:text-3xl font-bold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               How can I help you today?
             </h1>
