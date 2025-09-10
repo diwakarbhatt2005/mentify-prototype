@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, LogOut, Sun, Moon } from 'lucide-react';
+import { User, LogOut, Sun, Moon, Lock, Bot, Zap, Brain, Sparkles } from 'lucide-react';
 import logo from "/logo-mentify.jpg";
 
 interface NavbarProps {
@@ -9,12 +9,25 @@ interface NavbarProps {
   setSelectedModel: (model: string) => void;
 }
 
+interface Buddy {
+  id: string;
+  name: string;
+  icon: React.ComponentType<any>;
+  isLocked: boolean;
+  price?: string;
+}
+
 const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel, setSelectedModel }) => {
-  const models = ['Mentify 1', 'Mentify 2', 'Mentify 3', 'Mentuf 4'];
+  const buddies: Buddy[] = [
+    { id: 'mentify-1', name: 'Mentify 1', icon: Bot, isLocked: false },
+    { id: 'mentify-2', name: 'Mentify 2', icon: Zap, isLocked: false },
+    { id: 'mentify-3', name: 'Mentify 3', icon: Brain, isLocked: true, price: '$9.99' },
+    { id: 'mentify-4', name: 'Mentify 4', icon: Sparkles, isLocked: true, price: '$14.99' },
+  ];
 
   return (
     <nav className={`${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-b transition-colors duration-300`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-6 lg:px-12">
         <div className="flex justify-between items-center h-16">
           {/* Logo Section */}
           <div className="flex items-center">
@@ -43,23 +56,39 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
           </div>
 
           {/* Model Selection Dropdown */}
-          <div className="flex-1 max-w-xs mx-8">
+          <div className="flex-1 max-w-sm mx-8">
             <div className="relative">
               <select
                 value={selectedModel}
                 onChange={(e) => setSelectedModel(e.target.value)}
-                className={`w-full px-4 py-2 rounded-lg border transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                className={`w-full px-4 py-2 rounded-lg border transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none ${
                   isDarkMode 
                     ? 'bg-gray-800 border-gray-600 text-white hover:bg-gray-700' 
                     : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50'
                 }`}
               >
-                {models.map((model) => (
-                  <option key={model} value={model}>
-                    {model}
+                {buddies.map((buddy) => (
+                  <option 
+                    key={buddy.id} 
+                    value={buddy.name}
+                    disabled={buddy.isLocked}
+                  >
+                    {buddy.name} {buddy.isLocked ? '🔒' : ''}
                   </option>
                 ))}
               </select>
+              
+              {/* Custom dropdown content for better styling */}
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                {(() => {
+                  const currentBuddy = buddies.find(b => b.name === selectedModel);
+                  if (currentBuddy) {
+                    const IconComponent = currentBuddy.icon;
+                    return <IconComponent size={16} className={isDarkMode ? 'text-gray-400' : 'text-gray-500'} />;
+                  }
+                  return null;
+                })()}
+              </div>
             </div>
           </div>
 

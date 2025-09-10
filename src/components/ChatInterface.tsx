@@ -294,7 +294,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <div className={`flex items-center space-x-2 mb-2 ${msg.type === 'user' ? 'justify-end' : ''}`}>
+                    <div className={`flex items-center space-x-2 mb-1 ${msg.type === 'user' ? 'justify-end' : ''}`}>
                       <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {msg.type === 'user' ? 'You' : selectedModel}
                       </span>
@@ -303,10 +303,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                       </span>
                     </div>
                     
-                    <div className={`prose max-w-none ${isDarkMode ? 'prose-invert' : ''}`}>
-                      <p className={`text-sm leading-relaxed whitespace-pre-wrap ${
-                        isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                      }`}>
+                    <div className={`inline-block max-w-[80%] p-3 rounded-2xl ${
+                      msg.type === 'user'
+                        ? isDarkMode 
+                          ? 'bg-blue-600 text-white' 
+                          : 'bg-blue-500 text-white'
+                        : isDarkMode 
+                          ? 'bg-gray-800 text-gray-100' 
+                          : 'bg-gray-100 text-gray-900'
+                    } ${msg.type === 'user' ? 'rounded-br-md' : 'rounded-bl-md'}`}>
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
                         {msg.content}
                       </p>
                     </div>
@@ -386,8 +392,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
       {/* Input Area */}
       <div className={`border-t ${isDarkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'}`}>
         <div className="max-w-4xl mx-auto p-4">
-          <div className="relative">
-            <div className={`flex items-end space-x-3 p-3 rounded-2xl border transition-colors duration-200 ${
+          <div className="relative flex items-center">
+            <div className={`flex items-center space-x-3 flex-1 px-4 py-3 rounded-2xl border transition-colors duration-200 ${
               isDarkMode 
                 ? 'bg-gray-800 border-gray-600 focus-within:border-gray-500' 
                 : 'bg-gray-50 border-gray-300 focus-within:border-gray-400'
@@ -407,7 +413,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Send a message..."
-                className={`flex-1 bg-transparent border-none outline-none resize-none max-h-32 ${
+                className={`flex-1 bg-transparent border-none outline-none focus:outline-none focus:ring-0 resize-none max-h-32 py-1 ${
                   isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
                 }`}
                 rows={1}

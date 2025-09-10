@@ -32,9 +32,44 @@ function App() {
     {
       id: '3',
       timestamp: '2 days ago',
-      model: 'Mentuf 4',
+      model: 'Mentify 4',
       title: 'Creative writing',
       summary: 'Collaborative story writing session with character development.'
+    },
+    {
+      id: '4',
+      timestamp: '3 days ago',
+      model: 'Mentify 1',
+      title: 'Data analysis help',
+      summary: 'Assistance with interpreting statistical data and creating visualizations.'
+    },
+    {
+      id: '5',
+      timestamp: '4 days ago',
+      model: 'Mentify 3',
+      title: 'Language learning',
+      summary: 'Practice conversation in Spanish with grammar corrections and tips.'
+    },
+    {
+      id: '6',
+      timestamp: '5 days ago',
+      model: 'Mentify 2',
+      title: 'Recipe suggestions',
+      summary: 'Healthy meal planning and cooking instructions for vegetarian dishes.'
+    },
+    {
+      id: '7',
+      timestamp: '1 week ago',
+      model: 'Mentify 1',
+      title: 'Travel planning',
+      summary: 'Itinerary creation for a 2-week European vacation with budget considerations.'
+    },
+    {
+      id: '8',
+      timestamp: '1 week ago',
+      model: 'Mentify 4',
+      title: 'Business strategy',
+      summary: 'Market analysis and competitive positioning for a new startup idea.'
     }
   ]);
 

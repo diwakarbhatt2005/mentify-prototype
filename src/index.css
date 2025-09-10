@@ -35,6 +35,23 @@ body {
   @apply bg-gray-400 dark:bg-gray-500;
 }
 
+/* Thin scrollbar utilities */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+}
+
+.dark .scrollbar-thumb-gray-600::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
 /* Line clamp utility */
 .line-clamp-2 {
   display: -webkit-box;
@@ -55,8 +72,14 @@ button:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 input:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  outline: none !important;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+/* Remove default focus outline for textarea specifically */
+textarea:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Animation for pulse effect */
