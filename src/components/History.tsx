@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { Clock, Trash2, Download } from 'lucide-react';
 
 interface HistoryItem {
