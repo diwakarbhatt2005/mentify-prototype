@@ -141,13 +141,3 @@ function App() {
 }
 
 export default App;
-          isDarkMode={isDarkMode}
-          selectedModel={selectedModel}
-          onNewInteraction={handleNewInteraction}
-        />
-      </div>
-    </div>
-  );
-}
-
-export default App;
