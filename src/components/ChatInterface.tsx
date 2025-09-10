@@ -223,11 +223,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
         </div>
       </div>
 
-      {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto flex items-center justify-center">
-        {messages.length === 0 ? (
-          // Welcome Screen
-          <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
             <h1 className={`text-2xl sm:text-3xl font-bold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               How can I help you today?
             </h1>
