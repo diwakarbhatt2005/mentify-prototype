@@ -169,9 +169,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
   return (
     <div className="flex-1 flex flex-col h-full">
       {/* Header */}
-      <div className={`flex items-center justify-between p-4 sm:p-6 border-b h-[73px] ${
+      <div className={`flex items-center justify-between p-4 sm:p-6 border-b ${
         isDarkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'
-      }`}>
+      } h-[73px]`}>
         <div className="flex items-center space-x-3">
           <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
             isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
@@ -227,16 +227,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
       <div className="flex-1 overflow-y-auto flex items-center justify-center">
         {messages.length === 0 ? (
           // Welcome Screen
-          <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 min-h-full">
+          <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
             <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 ${
               isDarkMode ? 'bg-gray-800' : 'bg-gray-100'
-            }`}>
+            } mx-auto`}>
               <Bot className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} size={32} />
             </div>
-            <h1 className={`text-2xl sm:text-3xl font-bold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            <h1 className={`text-2xl sm:text-3xl font-bold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'} max-w-2xl`}>
               How can I help you today?
             </h1>
-            <p className={`text-base sm:text-lg mb-8 text-center max-w-2xl px-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p className={`text-base sm:text-lg mb-8 text-center max-w-2xl ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               I'm {selectedModel}, your AI assistant. I can help with writing, analysis, coding, creative tasks, and much more. 
               You can type your message or use voice input.
             </p>
