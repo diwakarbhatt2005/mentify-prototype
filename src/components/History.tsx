@@ -79,7 +79,7 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                           ? 'bg-blue-600/20 border-l-4 border-l-blue-500 border border-gray-600' 
                           : 'bg-blue-50/80 border-l-4 border-l-blue-500 border border-gray-300'
                         : isDarkMode 
-                          className={`absolute top-3 right-3 p-1.5 rounded-md transition-colors duration-200 focus:outline-none ${
+                          ? 'hover:bg-gray-800 border border-gray-700' 
                           : 'hover:bg-gray-50 border border-gray-200'
                     }`}
                     onClick={() => setIsMobileOpen(false)}
@@ -87,7 +87,7 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                     onMouseLeave={() => setHoveredChat(null)}
                   >
                     {/* Delete button - permanently visible */}
-                      <div className="flex items-center justify-between mb-2 pr-12">
+                    {onDeleteChat && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -95,14 +95,14 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                         }}
                         className={`absolute top-3 right-3 p-1.5 rounded-md transition-colors duration-200 focus:outline-none ${
                           isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
-                        <span className={`text-xs mr-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        }`}
                         title="Delete chat"
                       >
                         <Trash2 size={16} />
-                      <h3 className={`text-sm font-medium mb-1 pr-12 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      </button>
                     )}
                     <div className="flex items-center justify-between mb-2 pr-12">
-                      <p className={`text-xs line-clamp-2 pr-12 ${
+                      <span className={`text-xs px-2 py-1 rounded-full ${
                         activeChat === item.id
                           ? isDarkMode ? 'bg-blue-700 text-blue-200' : 'bg-blue-200 text-blue-800'
                           : isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'
