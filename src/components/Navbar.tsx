@@ -37,7 +37,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
             </div>
             <div className="hidden sm:block">
               <h1 className={`text-lg sm:text-xl font-bold bg-gradient-to-r ${isDarkMode ? 'from-white to-gray-300' : 'from-gray-900 to-gray-600'} bg-clip-text text-transparent`}>
-                Mentify
+                Mentify AI
               </h1>
             </div>
           </div>
