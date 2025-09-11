@@ -98,101 +98,48 @@ span:focus,
 p:focus,
 h1:focus,
 h2:focus,
-h3:focus {
+h3:focus,
+div[class*="bg-gradient-to-br"]:focus,
+div[class*="from-blue-500"]:focus,
+div[class*="to-blue-600"]:focus {
   outline: none !important;
   box-shadow: none !important;
   border-color: inherit !important;
 }
 
 /* Remove blue outlines from user message elements */
-.user-message-bubble,
-.user-avatar,
-div[class*="bg-gradient-to-br"]:focus,
-div[class*="from-blue-500"]:focus,
-div[class*="to-blue-600"]:focus {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-/* Ensure no blue focus rings appear anywhere */
-*:focus,
-*:focus-visible,
-*:focus-within {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Remove webkit focus outlines */
-*::-webkit-focus-ring-color {
-  outline: none !important;
-}
-
-/* Force remove all focus styles */
-* {
-  outline: none !important;
-}
-
-*:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Specifically target user message bubbles and profile icons */
-div[class*="rounded-full"][class*="bg-gradient-to-br"],
-div[class*="rounded-2xl"][class*="bg-gradient-to-br"],
+div[class*="bg-gradient-to-br"],
 div[class*="from-blue-500"],
-div[class*="to-blue-600"] {
+div[class*="to-blue-600"],
+div[class*="rounded-full"][class*="bg-gradient-to-br"],
+div[class*="rounded-2xl"][class*="bg-gradient-to-br"] {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+/* Specifically target user message containers */
+.group div[class*="bg-gradient-to-br"][class*="from-blue-500"],
+.group div[class*="rounded-full"][class*="from-blue-500"],
+.group div[class*="rounded-2xl"][class*="from-blue-500"] {
   outline: none !important;
   box-shadow: none !important;
   border: none !important;
 }
 
-button {
+/* Remove any potential webkit outlines */
+div[class*="gradient"]::-webkit-focus-ring-color,
+div[class*="blue-"]::-webkit-focus-ring-color {
   outline: none !important;
 }
 
-button:focus {
+/* Force remove focus styles from message elements */
+div[class*="bg-gradient-to-br"],
+div[class*="rounded-full"],
+div[class*="rounded-2xl"] {
   outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Remove any potential outlines from user elements */
-*[class*="user"],
-*[class*="You"] {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-/* Force remove focus styles with highest specificity */
-* {
-  outline: none !important;
-}
-
-*:focus,
-*:focus-visible,
-*:active {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Specifically target message bubbles and user avatars to remove any outlines */
-.message-bubble,
-.user-message,
-.bot-message,
-.user-avatar,
-.bot-avatar {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-/* Remove any focus states from message containers */
-div[class*="rounded-2xl"]:focus,
-div[class*="rounded-full"]:focus {
-  outline: none !important;
-  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
 }
 
 /* Enhanced backdrop blur support */

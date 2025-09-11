@@ -486,14 +486,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
           <div className="w-full max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 flex-1 flex flex-col justify-center">
             {messages.map((msg) => (
               <div key={msg.id} className="group">
-                <div className={`flex items-center space-x-3 sm:space-x-4 ${msg.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
-                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                <div className={`flex items-start space-x-3 sm:space-x-4 ${msg.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-6 ${
                     msg.type === 'user' 
                       ? 'bg-gradient-to-br from-blue-500 to-blue-600'
                       : isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                  }`}
-                  style={{ outline: 'none', boxShadow: 'none' }}
-                  tabIndex={-1}>
+                  }`}>
                     {msg.type === 'user' ? (
                       <User className="text-white" size={14} />
                     ) : (
@@ -502,7 +500,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                   </div>
                   
                   <div className={`flex-1 min-w-0 max-w-[75%] ${msg.type === 'user' ? 'flex flex-col items-end' : ''}`}>
-                    <div className={`flex items-center mb-1 space-x-2 ${msg.type === 'user' ? 'justify-end' : ''}`}>
+                    <div className={`flex items-center mb-2 space-x-2 ${msg.type === 'user' ? 'justify-end' : ''}`}>
                       <span className={`text-xs sm:text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {msg.type === 'user' ? 'You' : selectedModel}
                       </span>
@@ -511,12 +509,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                       </span>
                     </div>
                     
-                    <div className={`inline-block p-3 sm:p-4 rounded-2xl focus:outline-none ${
+                    <div className={`inline-block p-3 sm:p-4 rounded-2xl ${
                       msg.type === 'user'
                         ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md'
                         : isDarkMode 
-                          ? 'bg-gray-800 text-gray-100 rounded-bl-md' 
-                          : 'bg-white text-gray-900 rounded-bl-md shadow-sm'
+                          ? 'bg-gray-800 text-gray-100 rounded-bl-md border border-gray-700' 
+                          : 'bg-white text-gray-900 rounded-bl-md border border-gray-200'
                     }`}>
                       <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap break-words">
                         {msg.content}
