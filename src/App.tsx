@@ -14,6 +14,7 @@ interface HistoryItem {
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedModel, setSelectedModel] = useState('Mentify 1');
+  const [activeChat, setActiveChat] = useState<string>('1');
   const [history, setHistory] = useState<HistoryItem[]>([
     {
       id: '1',
@@ -92,6 +93,13 @@ function App() {
     setHistory([]);
   };
 
+  const handleDeleteChat = (id: string) => {
+    setHistory(prev => prev.filter(item => item.id !== id));
+    if (activeChat === id && history.length > 1) {
+      setActiveChat(history.find(item => item.id !== id)?.id || '');
+    }
+  };
+
   // Apply theme to document
   useEffect(() => {
     if (isDarkMode) {
@@ -116,7 +124,9 @@ function App() {
         <History 
           isDarkMode={isDarkMode}
           history={history}
+          activeChat={activeChat}
           onClearHistory={handleClearHistory}
+          onDeleteChat={handleDeleteChat}
         />
         
         <div className="flex-1 flex flex-col">
