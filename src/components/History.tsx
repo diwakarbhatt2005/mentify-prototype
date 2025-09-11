@@ -229,16 +229,6 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
         </div>
       </div>
 
-      {/* Mobile History Toggle Button */}
-      <button
-        onClick={() => setIsMobileOpen(true)}
-        className={`lg:hidden fixed bottom-20 left-4 z-40 p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-105 ${
-          isDarkMode ? 'bg-gray-800 text-white border border-gray-600' : 'bg-white text-gray-900 border border-gray-200'
-        }`}
-        title="Open History"
-      >
-        <Clock size={20} />
-      </button>
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Send, Volume2, VolumeX, Bot, User, Copy, RefreshCw, Plus, Paperclip, ArrowUp, ChevronDown, Lock, Check, Zap, Brain, Sparkles, X, FileText, Image as ImageIcon, File } from 'lucide-react';
+import { Mic, MicOff, Send, Volume2, VolumeX, Bot, User, Copy, RefreshCw, Plus, Paperclip, ArrowUp, ChevronDown, Lock, Check, Zap, Brain, Sparkles, X, FileText, Image as ImageIcon, File, Edit3, Lightbulb, FileSearch, Palette, Clock } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -7,11 +7,11 @@ interface Message {
   content: string;
   timestamp: Date;
   isVoice?: boolean;
-  attachment?: {
+  attachments?: {
     file: File;
     type: 'image' | 'document' | 'other';
     preview?: string;
-  };
+  }[];
 }
 
 interface Buddy {
@@ -38,17 +38,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [attachedFile, setAttachedFile] = useState<{
+  const [attachedFiles, setAttachedFiles] = useState<{
     file: File;
     type: 'image' | 'document' | 'other';
     preview?: string;
-  } | null>(null);
+  }[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [contextualSuggestions, setContextualSuggestions] = useState<string[]>([]);
   const [suggestions] = useState([
-    "Help me write an email",
-    "Explain this concept",
-    "Create a summary",
-    "Generate ideas"
+    { text: "Help me write an email", icon: Edit3 },
+    { text: "Explain this concept", icon: Lightbulb },
+    { text: "Create a summary", icon: FileSearch },
+    { text: "Generate ideas", icon: Palette }
   ]);
   
   const modelSelectorRef = useRef<HTMLDivElement>(null);
@@ -148,27 +149,39 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
   }, [message]);
 
   // Handle file selection
-  const handleFileSelect = (file: File) => {
-    const fileType = file.type.startsWith('image/') ? 'image' : 
-                    file.type.includes('pdf') || file.type.includes('document') || file.type.includes('text') ? 'document' : 'other';
-    
-    const attachment = {
-      file,
-      type: fileType as 'image' | 'document' | 'other'
-    };
-
-    if (fileType === 'image') {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setAttachedFile({
-          ...attachment,
-          preview: e.target?.result as string
-        });
+  const handleFileSelect = (files: File[]) => {
+    const newAttachments = files.map(file => {
+      const fileType = file.type.startsWith('image/') ? 'image' : 
+                      file.type.includes('pdf') || file.type.includes('document') || file.type.includes('text') ? 'document' : 'other';
+      
+      return {
+        file,
+        type: fileType as 'image' | 'document' | 'other'
       };
-      reader.readAsDataURL(file);
-    } else {
-      setAttachedFile(attachment);
-    }
+    });
+
+    // Process image previews
+    newAttachments.forEach((attachment, index) => {
+      if (attachment.type === 'image') {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setAttachedFiles(prev => {
+            const updated = [...prev];
+            const targetIndex = prev.length + index;
+            if (updated[targetIndex]) {
+              updated[targetIndex] = {
+                ...updated[targetIndex],
+                preview: e.target?.result as string
+              };
+            }
+            return updated;
+          });
+        };
+        reader.readAsDataURL(attachment.file);
+      }
+    });
+
+    setAttachedFiles(prev => [...prev, ...newAttachments]);
   };
 
   // Handle file input click
@@ -178,9 +191,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
 
   // Handle file input change
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleFileSelect(file);
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      handleFileSelect(files);
     }
   };
 
@@ -201,13 +214,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
     
     const files = Array.from(e.dataTransfer.files);
     if (files.length > 0) {
-      handleFileSelect(files[0]);
+      handleFileSelect(files);
     }
   };
 
   // Remove attachment
-  const removeAttachment = () => {
-    setAttachedFile(null);
+  const removeAttachment = (index: number) => {
+    setAttachedFiles(prev => prev.filter((_, i) => i !== index));
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -292,6 +305,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
     return `${randomResponse} This is a simulated response from ${selectedModel}. In a real implementation, this would connect to an actual AI model to provide meaningful responses based on your input.`;
   };
 
+  // Generate contextual suggestions based on conversation
+  const generateContextualSuggestions = (lastBotMessage: string) => {
+    const suggestions = [
+      "Make it shorter",
+      "Explain it simply", 
+      "Give me more details"
+    ];
+    setContextualSuggestions(suggestions);
+  };
+
   const handleSendMessage = async () => {
     if (!message.trim()) return;
 
@@ -301,12 +324,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
       content: message.trim(),
       timestamp: new Date(),
       isVoice: isListening,
-      attachment: attachedFile || undefined
+      attachments: attachedFiles.length > 0 ? attachedFiles : undefined
     };
 
     setMessages(prev => [...prev, userMessage]);
     setMessage('');
-    setAttachedFile(null);
+    setAttachedFiles([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -329,6 +352,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
 
       setMessages(prev => [...prev, botResponse]);
       setIsTyping(false);
+      generateContextualSuggestions(botResponse.content);
     }, 1000 + Math.random() * 2000);
   };
 
@@ -354,6 +378,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
   const startNewChat = () => {
     setMessages([]);
     setMessage('');
+    setContextualSuggestions([]);
   };
 
   return (
@@ -457,6 +482,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
           </div>
         </div>
         <div className="flex items-center space-x-1 sm:space-x-2">
+          {/* Mobile History Button */}
+          <button
+            className={`lg:hidden p-2 rounded-lg transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+              isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+            }`}
+            title="History"
+          >
+            <Clock size={16} />
+          </button>
           <button
             onClick={startNewChat}
             className={`hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-lg transition-colors duration-200 ${
@@ -533,11 +567,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
 
       {/* Messages Area */}
       <div 
-        className={`flex-1 overflow-y-auto transition-all duration-200 ${
+        className={`flex-1 overflow-y-auto transition-all duration-200 relative ${
           isDragOver 
-            ? isDarkMode 
-              ? 'bg-blue-900/20 border-2 border-dashed border-blue-500' 
-              : 'bg-blue-50/50 border-2 border-dashed border-blue-400'
+            ? 'bg-black/50'
             : isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
         }`}
         onDragOver={handleDragOver}
@@ -545,20 +577,20 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
         onDrop={handleDrop}
       >
         {isDragOver && (
-          <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-            <div className={`text-center p-4 rounded-xl ${
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10 pointer-events-none">
+            <div className={`text-center p-6 rounded-2xl border-2 border-dashed ${
               isDarkMode ? 'bg-gray-800/90 text-white' : 'bg-white/90 text-gray-900'
-            }`}>
-              <Paperclip size={32} className="mx-auto mb-2 text-blue-500" />
-              <h3 className="text-lg font-semibold mb-1">Drop file here</h3>
-              <p className="text-xs opacity-70">Release to attach</p>
+            } border-blue-500`}>
+              <Paperclip size={48} className="mx-auto mb-4 text-blue-500" />
+              <h3 className="text-xl font-bold mb-2">Drop your files here</h3>
+              <p className="text-sm opacity-70">Release to attach files</p>
             </div>
           </div>
         )}
         
         {messages.length === 0 ? (
           // Welcome Screen
-          <div className="flex flex-col items-center justify-end h-full p-4 sm:p-6 lg:p-8 text-center pb-8">
+          <div className="flex flex-col items-center justify-end h-full p-4 sm:p-6 lg:p-8 text-center pb-16">
             <h1 className={`text-xl sm:text-2xl font-bold mb-3 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               How can I help you today?
             </h1>
@@ -567,20 +599,39 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
             </p>
             
             {/* Suggestion Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl w-full px-4 mb-6">
-              {suggestions.map((suggestion, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  className={`p-4 rounded-xl text-left transition-all duration-200 hover:scale-[1.02] ${
-                    isDarkMode 
-                      ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700' 
-                      : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm hover:shadow-md'
-                  }`}
-                >
-                  <div className="text-sm font-medium">{suggestion}</div>
-                </button>
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl w-full px-4 mb-8">
+              {suggestions.map((suggestion, index) => {
+                const IconComponent = suggestion.icon;
+                return (
+                  <button
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion.text)}
+                    className={`group p-6 rounded-2xl text-left transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${
+                      isDarkMode 
+                        ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 hover:border-gray-600' 
+                        : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm hover:shadow-xl hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3 mb-2">
+                      <div className={`p-2 rounded-lg transition-colors duration-300 ${
+                        isDarkMode 
+                          ? 'bg-gray-700 group-hover:bg-gray-600' 
+                          : 'bg-gray-100 group-hover:bg-blue-100'
+                      }`}>
+                        <IconComponent size={18} className={`transition-colors duration-300 ${
+                          isDarkMode 
+                            ? 'text-gray-400 group-hover:text-gray-300' 
+                            : 'text-gray-600 group-hover:text-blue-600'
+                        }`} />
+                      </div>
+                    </div>
+                    <div className="text-sm font-semibold mb-1">{suggestion.text}</div>
+                    <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                      Click to get started
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         ) : (
@@ -609,34 +660,38 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                     
                     <div className={`inline-block px-3 py-2 sm:px-4 sm:py-3 rounded-2xl ${
                       msg.type === 'user'
-                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md max-w-fit !outline-none !border-none !shadow-none !ring-0'
+                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md max-w-fit'
                         : isDarkMode 
                           ? 'bg-gray-800 text-gray-100 rounded-bl-md border border-gray-700' 
                           : 'bg-white text-gray-900 rounded-bl-md border border-gray-200'
                     }`}>
-                      {msg.attachment && (
-                        <div className="mb-2">
-                          {msg.attachment.type === 'image' && msg.attachment.preview ? (
-                            <img 
-                              src={msg.attachment.preview} 
-                              alt="Attachment" 
-                              className="max-w-xs max-h-48 rounded-lg object-cover"
-                            />
-                          ) : (
-                            <div className={`flex items-center space-x-2 p-2 rounded-lg ${
-                              msg.type === 'user' ? 'bg-white/20' : isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-                            }`}>
-                              {React.createElement(getFileIcon(msg.attachment.type), { 
-                                size: 16, 
-                                className: msg.type === 'user' ? 'text-white' : isDarkMode ? 'text-gray-300' : 'text-gray-600' 
-                              })}
-                              <span className={`text-sm ${
-                                msg.type === 'user' ? 'text-white' : isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                              }`}>
-                                {msg.attachment.file.name}
-                              </span>
+                      {msg.attachments && msg.attachments.length > 0 && (
+                        <div className="mb-2 space-y-2">
+                          {msg.attachments.map((attachment, index) => (
+                            <div key={index}>
+                              {attachment.type === 'image' && attachment.preview ? (
+                                <img 
+                                  src={attachment.preview} 
+                                  alt="Attachment" 
+                                  className="max-w-xs max-h-48 rounded-lg object-cover"
+                                />
+                              ) : (
+                                <div className={`flex items-center space-x-2 p-2 rounded-lg ${
+                                  msg.type === 'user' ? 'bg-white/20' : isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                                }`}>
+                                  {React.createElement(getFileIcon(attachment.type), { 
+                                    size: 14, 
+                                    className: msg.type === 'user' ? 'text-white' : isDarkMode ? 'text-gray-300' : 'text-gray-600' 
+                                  })}
+                                  <span className={`text-xs ${
+                                    msg.type === 'user' ? 'text-white' : isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                                  }`}>
+                                    {attachment.file.name}
+                                  </span>
+                                </div>
+                              )}
                             </div>
-                          )}
+                          ))}
                         </div>
                       )}
                       <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap break-words">
@@ -660,7 +715,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                         }`}
                         title="Copy message"
                       >
-                        <Copy size={12} className="sm:w-[14px] sm:h-[14px]" />
+                        <Copy size={10} className="sm:w-[12px] sm:h-[12px]" />
                       </button>
                       {msg.type === 'bot' && (
                         <button
@@ -672,7 +727,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                           }`}
                           title="Read aloud"
                         >
-                          {isSpeaking ? <VolumeX size={12} className="sm:w-[14px] sm:h-[14px]" /> : <Volume2 size={12} className="sm:w-[14px] sm:h-[14px]" />}
+                          {isSpeaking ? <VolumeX size={10} className="sm:w-[12px] sm:h-[12px]" /> : <Volume2 size={10} className="sm:w-[12px] sm:h-[12px]" />}
                         </button>
                       )}
                     </div>
@@ -718,15 +773,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
 
       {/* Input Area */}
       <div className={`${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
-        {/* Suggestions */}
-        {messages.length === 0 && (
+        {/* Dynamic Contextual Suggestions */}
+        {contextualSuggestions.length > 0 && (
           <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 pt-2">
             <div className="flex justify-end gap-2 mb-2">
-              {suggestions.slice(0, 2).map((suggestion, index) => (
+              {contextualSuggestions.slice(0, 3).map((suggestion, index) => (
                 <button
                   key={index}
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className={`px-2 py-1 rounded-full text-xs transition-all duration-200 hover:scale-105 ${
+                  className={`px-3 py-1.5 rounded-full text-xs transition-all duration-200 hover:scale-105 ${
                     isDarkMode 
                       ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700' 
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200'
@@ -740,46 +795,48 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
         )}
         
         <div className="max-w-4xl mx-auto p-2 sm:p-3 lg:p-4 pb-safe">
-          {/* File attachment preview */}
-          {attachedFile && (
-            <div className={`mb-2 p-2 rounded-lg border ${
+          {/* Multiple file attachments preview */}
+          {attachedFiles.length > 0 && (
+            <div className={`mb-2 p-3 rounded-lg border ${
               isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'
             }`}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  {attachedFile.type === 'image' && attachedFile.preview ? (
-                    <img 
-                      src={attachedFile.preview} 
-                      alt="Preview" 
-                      className="w-8 h-8 rounded object-cover"
-                    />
-                  ) : (
-                    <div className={`w-8 h-8 rounded flex items-center justify-center ${
-                      isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
-                    }`}>
-                      {React.createElement(getFileIcon(attachedFile.type), { 
-                        size: 16, 
-                        className: isDarkMode ? 'text-gray-300' : 'text-gray-600' 
-                      })}
+              <div className="flex flex-wrap gap-2">
+                {attachedFiles.map((attachedFile, index) => (
+                  <div key={index} className="flex items-center space-x-2 bg-white/10 rounded-lg p-2 relative group">
+                    {attachedFile.type === 'image' && attachedFile.preview ? (
+                      <img 
+                        src={attachedFile.preview} 
+                        alt="Preview" 
+                        className="w-10 h-10 rounded object-cover"
+                      />
+                    ) : (
+                      <div className={`w-10 h-10 rounded flex items-center justify-center ${
+                        isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                      }`}>
+                        {React.createElement(getFileIcon(attachedFile.type), { 
+                          size: 16, 
+                          className: isDarkMode ? 'text-gray-300' : 'text-gray-600' 
+                        })}
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-xs font-medium truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {attachedFile.file.name}
+                      </p>
+                      <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {(attachedFile.file.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
                     </div>
-                  )}
-                  <div>
-                    <p className={`text-xs font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                      {attachedFile.file.name}
-                    </p>
-                    <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {(attachedFile.file.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
+                    <button
+                      onClick={() => removeAttachment(index)}
+                      className={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-200 ${
+                        isDarkMode ? 'bg-gray-600 hover:bg-red-600 text-gray-300 hover:text-white' : 'bg-gray-300 hover:bg-red-500 text-gray-600 hover:text-white'
+                      }`}
+                    >
+                      <X size={10} />
+                    </button>
                   </div>
-                </div>
-                <button
-                  onClick={removeAttachment}
-                  className={`p-1 rounded transition-colors duration-200 ${
-                    isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
-                  }`}
-                >
-                  <X size={12} />
-                </button>
+                ))}
               </div>
             </div>
           )}
@@ -791,6 +848,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
               onChange={handleFileInputChange}
               className="hidden"
               accept="image/*,.pdf,.doc,.docx,.txt"
+              multiple
             />
             <div className={`flex items-center space-x-2 flex-1 px-3 py-2 rounded-xl border transition-colors duration-200 ${
               isDarkMode 
