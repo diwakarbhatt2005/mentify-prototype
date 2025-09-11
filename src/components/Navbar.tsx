@@ -40,6 +40,11 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
                 Mentify AI
               </h1>
             </div>
+            <div className="block sm:hidden">
+              <h1 className={`text-sm font-bold bg-gradient-to-r ${isDarkMode ? 'from-white to-gray-300' : 'from-gray-900 to-gray-600'} bg-clip-text text-transparent`}>
+                Mentify AI
+              </h1>
+            </div>
           </div>
 
           {/* Current Model Display */}

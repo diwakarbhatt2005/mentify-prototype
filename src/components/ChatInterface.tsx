@@ -32,6 +32,7 @@ interface ChatInterfaceProps {
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel, onNewInteraction }) => {
   const [isModelSelectorOpen, setIsModelSelectorOpen] = useState(false);
+  const [isMobileHistoryOpen, setIsMobileHistoryOpen] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState<Buddy | null>(null);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -382,9 +383,45 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full">
+    <div className="flex-1 flex flex-col h-full relative">
+      {/* Mobile History Overlay */}
+      {isMobileHistoryOpen && (
+        <div className="lg:hidden fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setIsMobileHistoryOpen(false)}></div>
+          <div className={`absolute left-0 top-0 bottom-0 w-80 max-w-[85vw] ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-r transition-colors duration-300 flex flex-col`}>
+            <div className={`p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} h-[57px] sm:h-[73px] flex items-center`}>
+              <div className="flex items-center justify-between w-full">
+                <h2 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  History
+                </h2>
+                <button
+                  onClick={() => setIsMobileHistoryOpen(false)}
+                  className={`p-1.5 rounded-md transition-colors duration-200 ${
+                    isDarkMode 
+                      ? 'text-gray-400 hover:text-white hover:bg-gray-800' 
+                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                  }`}
+                  title="Close"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+              <div className="p-4 text-center">
+                <Clock className={`mx-auto mb-2 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`} size={24} />
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  No history yet
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Header */}
-      <div className={`flex items-center justify-between p-3 sm:p-4 lg:p-6 border-b relative ${
+      <div className={`flex items-center justify-between p-3 sm:p-4 lg:p-6 border-b ${
         isDarkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'
       } h-[57px] sm:h-[73px]`}>
         <div className="flex items-center space-x-2 sm:space-x-3">
@@ -393,7 +430,138 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
           }`}>
             <Bot className="text-white" size={14} />
           </div>
+          <div className="flex items-center space-x-2">
+            <div className="flex flex-col">
+              <div className="flex items-center space-x-1">
+                <h2 className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {selectedModel}
+                </h2>
+                <button
+                  onClick={() => setIsModelSelectorOpen(!isModelSelectorOpen)}
+                  className={`p-1 rounded transition-colors duration-200 ${
+                    isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
+                  }`}
+                >
+                  <ChevronDown 
+                    size={14} 
+                    className={`transition-transform duration-300 ${isModelSelectorOpen ? 'rotate-180' : ''} ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} 
+                  />
+                </button>
+              </div>
+              <div className={`flex items-center space-x-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                <span className="text-xs">Online</span>
+              </div>
+            </div>
+          </div>
+          
           <div className="relative" ref={modelSelectorRef}>
+            {/* Model Selector Dropdown */}
+            {isModelSelectorOpen && (
+              <div className={`absolute top-full left-0 mt-2 w-80 rounded-xl border shadow-xl backdrop-blur-xl z-50 overflow-hidden ${
+                isDarkMode 
+                  ? 'bg-gray-800/95 border-gray-600' 
+                  : 'bg-white/95 border-gray-200'
+              }`}>
+                <div className="p-2">
+                  {buddies.map((buddy) => {
+                    const IconComponent = buddy.icon;
+                    const isSelected = buddy.name === selectedModel;
+                    
+                    return (
+                      <div
+                        key={buddy.id}
+                        onClick={() => handleModelSelect(buddy)}
+                        className={`relative p-3 rounded-lg cursor-pointer transition-all duration-200 group ${
+                          isDarkMode 
+                            ? 'hover:bg-gray-700/80' 
+                            : 'hover:bg-gray-50/80'
+                        } ${isSelected ? (isDarkMode ? 'bg-blue-600/20' : 'bg-blue-50/80') : ''}`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                              isDarkMode ? 'bg-gray-700 group-hover:bg-gray-600' : 'bg-gray-100 group-hover:bg-white'
+                            }`}>
+                              {buddy.isLocked ? (
+                                <Lock size={14} className="text-gray-400" />
+                              ) : (
+                                <IconComponent size={14} className={buddy.color} />
+                              )}
+                            </div>
+                            <div className="flex-1">
+                              <div className={`font-semibold text-sm flex items-center space-x-2 ${
+                                isDarkMode ? 'text-white' : 'text-gray-900'
+                              }`}>
+                                <span>{buddy.name}</span>
+                                {isSelected && !buddy.isLocked && (
+                                  <Check size={12} className="text-blue-500" />
+                                )}
+                              </div>
+                              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                {buddy.description}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {buddy.isLocked && (
+                            <div className={`text-xs px-2 py-1 rounded-full ${
+                              isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'
+                            }`}>
+                              {buddy.price}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center space-x-1 sm:space-x-2">
+          {/* Mobile History Button */}
+          <button
+            onClick={() => setIsMobileHistoryOpen(true)}
+            className={`lg:hidden p-2 rounded-lg transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+              isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+            }`}
+            title="History"
+          >
+            <Clock size={16} />
+          </button>
+          <button
+            onClick={startNewChat}
+            className={`hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-lg transition-colors duration-200 ${
+              isDarkMode 
+                ? 'text-gray-300 hover:text-white hover:bg-gray-800 border border-gray-600' 
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 border border-gray-300'
+            }`}
+          >
+            <Plus size={16} />
+            <span className="text-sm">New Chat</span>
+          </button>
+          <button
+            onClick={startNewChat}
+            className={`md:hidden p-2 rounded-lg transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+              isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+            }`}
+            title="New Chat"
+          >
+            <Plus size={16} />
+          </button>
+          <button
+            onClick={clearChat}
+            className={`p-2 rounded-lg transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+              isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+            }`}
+            title="Clear Chat"
+          >
+            <RefreshCw size={16} />
+          </button>
+        </div>
+      </div>
             <button
               onClick={() => setIsModelSelectorOpen(!isModelSelectorOpen)}
               className={`flex items-center space-x-2 p-2 rounded-lg transition-all duration-200 ${
@@ -590,42 +758,42 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
         
         {messages.length === 0 ? (
           // Welcome Screen
-          <div className="flex flex-col items-center justify-end h-full p-4 sm:p-6 lg:p-8 text-center pb-16">
-            <h1 className={`text-xl sm:text-2xl font-bold mb-3 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          <div className="flex flex-col items-center justify-end h-full p-3 sm:p-4 lg:p-6 text-center pb-12">
+            <h1 className={`text-lg sm:text-xl font-bold mb-2 text-center max-w-xs sm:max-w-none ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               How can I help you today?
             </h1>
-            <p className={`text-sm mb-4 text-center max-w-xl px-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p className={`text-xs sm:text-sm mb-3 text-center max-w-xs sm:max-w-lg px-2 sm:px-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               I'm {selectedModel}, your AI assistant. I can help with writing, analysis, coding, creative tasks, and much more. 
             </p>
             
             {/* Suggestion Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl w-full px-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 max-w-sm sm:max-w-lg w-full px-2 sm:px-4 mb-6">
               {suggestions.map((suggestion, index) => {
                 const IconComponent = suggestion.icon;
                 return (
                   <button
                     key={index}
                     onClick={() => handleSuggestionClick(suggestion.text)}
-                    className={`group p-6 rounded-2xl text-left transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${
+                    className={`group p-3 sm:p-4 rounded-xl text-left transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${
                       isDarkMode 
                         ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 hover:border-gray-600' 
                         : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm hover:shadow-xl hover:border-gray-300'
                     }`}
                   >
-                    <div className="flex items-center space-x-3 mb-2">
-                      <div className={`p-2 rounded-lg transition-colors duration-300 ${
+                    <div className="flex items-center space-x-2 mb-1">
+                      <div className={`p-1.5 rounded-lg transition-colors duration-300 ${
                         isDarkMode 
                           ? 'bg-gray-700 group-hover:bg-gray-600' 
                           : 'bg-gray-100 group-hover:bg-blue-100'
                       }`}>
-                        <IconComponent size={18} className={`transition-colors duration-300 ${
+                        <IconComponent size={14} className={`transition-colors duration-300 ${
                           isDarkMode 
                             ? 'text-gray-400 group-hover:text-gray-300' 
                             : 'text-gray-600 group-hover:text-blue-600'
                         }`} />
                       </div>
                     </div>
-                    <div className="text-sm font-semibold mb-1">{suggestion.text}</div>
+                    <div className="text-xs sm:text-sm font-semibold mb-0.5">{suggestion.text}</div>
                     <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
                       Click to get started
                     </div>
@@ -636,7 +804,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
           </div>
         ) : (
           // Chat Messages
-          <div className="w-full max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 flex-1 flex flex-col justify-center">
+          <div className="w-full max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 space-y-3 sm:space-y-4 flex-1 flex flex-col justify-center">
             {messages.map((msg) => (
               <div key={msg.id} className="group">
                 <div className={`flex items-start space-x-3 sm:space-x-4 ${msg.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
@@ -707,7 +875,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                     )}
                     
                     {/* Message Actions */}
-                    <div className={`flex items-center space-x-1 sm:space-x-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200`}>
+                    <div className={`flex items-center space-x-1 sm:space-x-2 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200`}>
                       <button
                         onClick={() => copyMessage(msg.content)}
                         className={`p-1.5 sm:p-1 rounded transition-colors duration-200 min-h-[44px] min-w-[44px] sm:min-h-auto sm:min-w-auto flex items-center justify-center ${
@@ -715,7 +883,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                         }`}
                         title="Copy message"
                       >
-                        <Copy size={10} className="sm:w-[12px] sm:h-[12px]" />
+                        <Copy size={8} className="sm:w-[10px] sm:h-[10px]" />
                       </button>
                       {msg.type === 'bot' && (
                         <button
@@ -727,7 +895,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                           }`}
                           title="Read aloud"
                         >
-                          {isSpeaking ? <VolumeX size={10} className="sm:w-[12px] sm:h-[12px]" /> : <Volume2 size={10} className="sm:w-[12px] sm:h-[12px]" />}
+                          {isSpeaking ? <VolumeX size={8} className="sm:w-[10px] sm:h-[10px]" /> : <Volume2 size={8} className="sm:w-[10px] sm:h-[10px]" />}
                         </button>
                       )}
                     </div>
