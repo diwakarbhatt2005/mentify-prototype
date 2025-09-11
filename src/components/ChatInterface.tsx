@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Send, Volume2, VolumeX, Bot, User, Copy, RefreshCw, Plus, Paperclip, ArrowUp } from 'lucide-react';
+import { Mic, MicOff, Send, Volume2, VolumeX, Bot, User, Copy, RefreshCw, Plus, Paperclip, ArrowUp, ChevronDown, Lock, Check, Zap, Brain, Sparkles } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -9,6 +9,16 @@ interface Message {
   isVoice?: boolean;
 }
 
+interface Buddy {
+  id: string;
+  name: string;
+  icon: React.ComponentType<any>;
+  isLocked: boolean;
+  price?: string;
+  description: string;
+  color: string;
+}
+
 interface ChatInterfaceProps {
   isDarkMode: boolean;
   selectedModel: string;
@@ -16,11 +26,54 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel, onNewInteraction }) => {
+  const [isModelSelectorOpen, setIsModelSelectorOpen] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState<Buddy | null>(null);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  
+  const modelSelectorRef = useRef<HTMLDivElement>(null);
+
+  const buddies: Buddy[] = [
+    { 
+      id: 'mentify-1', 
+      name: 'Mentify 1', 
+      icon: Bot, 
+      isLocked: false, 
+      description: 'General purpose AI assistant',
+      color: 'text-blue-500'
+    },
+    { 
+      id: 'mentify-2', 
+      name: 'Mentify 2', 
+      icon: Zap, 
+      isLocked: false, 
+      description: 'Fast and efficient responses',
+      color: 'text-yellow-500'
+    },
+    { 
+      id: 'mentify-3', 
+      name: 'Mentify 3', 
+      icon: Brain, 
+      isLocked: true, 
+      price: '$9.99', 
+      description: 'Advanced reasoning and analysis',
+      color: 'text-purple-500'
+    },
+    { 
+      id: 'mentify-4', 
+      name: 'Mentify 4', 
+      icon: Sparkles, 
+      isLocked: true, 
+      price: '$14.99', 
+      description: 'Creative and innovative solutions',
+      color: 'text-pink-500'
+    },
+  ];
+
+  const currentBuddy = buddies.find(b => b.name === selectedModel) || buddies[0];
   
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -51,6 +104,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
     }
   }, []);
 
+  // Close model selector when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modelSelectorRef.current && !modelSelectorRef.current.contains(event.target as Node)) {
+        setIsModelSelectorOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -63,6 +128,25 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
       textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 200) + 'px';
     }
   }, [message]);
+
+  const handleModelSelect = (buddy: Buddy) => {
+    if (buddy.isLocked) {
+      setShowUpgradeModal(buddy);
+    } else {
+      onNewInteraction(`Switched to ${buddy.name}`, `Changed AI model to ${buddy.name}`);
+      setIsModelSelectorOpen(false);
+    }
+  };
+
+  const handleUpgradeModalClose = () => {
+    setShowUpgradeModal(null);
+    setIsModelSelectorOpen(false);
+  };
+
+  const handleUpgrade = () => {
+    alert(`Redirecting to upgrade ${showUpgradeModal?.name} for ${showUpgradeModal?.price}`);
+    handleUpgradeModalClose();
+  };
 
   const toggleListening = () => {
     if (!recognitionRef.current) {
@@ -169,7 +253,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
   return (
     <div className="flex-1 flex flex-col h-full">
       {/* Header */}
-      <div className={`flex items-center justify-between p-3 sm:p-4 lg:p-6 border-b ${
+      <div className={`flex items-center justify-between p-3 sm:p-4 lg:p-6 border-b relative ${
         isDarkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'
       } h-[57px] sm:h-[73px]`}>
         <div className="flex items-center space-x-2 sm:space-x-3">
@@ -178,18 +262,94 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
           }`}>
             <Bot className="text-white" size={14} />
           </div>
-          <div>
-            <h2 className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              {selectedModel}
-            </h2>
-            <div className={`flex items-center space-x-1`}>
-              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full"></div>
-              <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                Online
-              </span>
+          <div className="relative" ref={modelSelectorRef}>
+            <button
+              onClick={() => setIsModelSelectorOpen(!isModelSelectorOpen)}
+              className={`flex items-center space-x-2 p-2 rounded-lg transition-all duration-200 ${
+                isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
+              }`}
+            >
+              <div>
+                <h2 className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {selectedModel}
+                </h2>
+                <div className={`flex items-center space-x-1`}>
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full"></div>
+                  <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Online
+                  </span>
+                </div>
+              </div>
+              <ChevronDown 
+                size={14} 
+                className={`transition-transform duration-300 ${isModelSelectorOpen ? 'rotate-180' : ''} ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} 
+              />
+            </button>
+
+            {/* Model Selector Dropdown */}
+            {isModelSelectorOpen && (
+              <div className={`absolute top-full left-0 mt-2 w-80 rounded-xl border shadow-xl backdrop-blur-xl z-50 overflow-hidden ${
+                isDarkMode 
+                  ? 'bg-gray-800/95 border-gray-600' 
+                  : 'bg-white/95 border-gray-200'
+              }`}>
+                <div className="p-2">
+                  {buddies.map((buddy) => {
+                    const IconComponent = buddy.icon;
+                    const isSelected = buddy.name === selectedModel;
+                    
+                    return (
+                      <div
+                        key={buddy.id}
+                        onClick={() => handleModelSelect(buddy)}
+                        className={`relative p-3 rounded-lg cursor-pointer transition-all duration-200 group ${
+                          isDarkMode 
+                            ? 'hover:bg-gray-700/80' 
+                            : 'hover:bg-gray-50/80'
+                        } ${isSelected ? (isDarkMode ? 'bg-blue-600/20' : 'bg-blue-50/80') : ''}`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                              isDarkMode ? 'bg-gray-700 group-hover:bg-gray-600' : 'bg-gray-100 group-hover:bg-white'
+                            }`}>
+                              {buddy.isLocked ? (
+                                <Lock size={14} className="text-gray-400" />
+                              ) : (
+                                <IconComponent size={14} className={buddy.color} />
+                              )}
+                            </div>
+                            <div className="flex-1">
+                              <div className={`font-semibold text-sm flex items-center space-x-2 ${
+                                isDarkMode ? 'text-white' : 'text-gray-900'
+                              }`}>
+                                <span>{buddy.name}</span>
+                                {isSelected && !buddy.isLocked && (
+                                  <Check size={12} className="text-blue-500" />
+                                )}
+                              </div>
+                              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                {buddy.description}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {buddy.isLocked && (
+                            <div className={`text-xs px-2 py-1 rounded-full ${
+                              isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'
+                            }`}>
+                              {buddy.price}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             </div>
           </div>
-        </div>
         <div className="flex items-center space-x-1 sm:space-x-2">
           <button
             onClick={startNewChat}
@@ -222,6 +382,48 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
           </button>
         </div>
       </div>
+
+      {/* Upgrade Modal */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className={`max-w-md w-full rounded-2xl p-6 ${
+            isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
+          }`}>
+            <div className="text-center">
+              <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+              }`}>
+                <Lock size={24} className="text-gray-400" />
+              </div>
+              <h3 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Upgrade to {showUpgradeModal.name}
+              </h3>
+              <p className={`text-sm mb-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                {showUpgradeModal.description}
+              </p>
+              <div className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                {showUpgradeModal.price}/month
+              </div>
+              <div className="flex space-x-3">
+                <button
+                  onClick={handleUpgradeModalClose}
+                  className={`flex-1 py-2 px-4 rounded-lg transition-colors duration-200 ${
+                    isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
+                  }`}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleUpgrade}
+                  className="flex-1 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
+                >
+                  Upgrade Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Messages Area */}
       <div className={`flex-1 overflow-y-auto ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
@@ -284,7 +486,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
           <div className="w-full max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 flex-1 flex flex-col justify-center">
             {messages.map((msg) => (
               <div key={msg.id} className="group">
-                <div className={`flex items-start space-x-2 sm:space-x-4 ${msg.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                <div className={`flex items-start space-x-2 sm:space-x-4 ${msg.type === 'user' ? 'flex-row-reverse space-x-reverse justify-end' : ''}`}>
                   <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                     msg.type === 'user' 
                       ? isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
@@ -297,7 +499,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                     )}
                   </div>
                   
-                  <div className="flex-1 min-w-0">
+                  <div className={`flex-1 min-w-0 ${msg.type === 'user' ? 'flex flex-col items-end' : ''}`}>
                     <div className={`flex items-center space-x-1 sm:space-x-2 mb-1 ${msg.type === 'user' ? 'justify-end' : ''}`}>
                       <span className={`text-xs sm:text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {msg.type === 'user' ? 'You' : selectedModel}
@@ -316,7 +518,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                           ? 'bg-gray-800 text-gray-100' 
                           : 'bg-gray-100 text-gray-900'
                     } ${msg.type === 'user' ? 'rounded-br-md ml-auto' : 'rounded-bl-md'}`}>
-                      <p className="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words">
+                      <p className="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words text-left">
                         {msg.content}
                       </p>
                     </div>
