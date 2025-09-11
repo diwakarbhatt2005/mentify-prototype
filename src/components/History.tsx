@@ -27,7 +27,7 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
       {/* Mobile History Overlay */}
       <div className={`lg:hidden fixed inset-0 z-50 ${isMobileOpen ? 'block' : 'hidden'}`}>
         <div className="absolute inset-0 bg-black/50" onClick={() => setIsMobileOpen(false)}></div>
-        <div className={`absolute left-0 top-0 bottom-0 w-80 max-w-[90vw] ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-r transition-colors duration-300 flex flex-col`}>
+        <div className={`absolute left-0 top-0 bottom-0 w-80 max-w-[85vw] ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-r transition-colors duration-300 flex flex-col`}>
           <div className={`p-3 sm:p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} h-[60px] flex items-center`}>
             <div className="flex items-center justify-between w-full">
               <h2 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -93,15 +93,15 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                           e.stopPropagation();
                           onDeleteChat(item.id);
                         }}
-                        className={`absolute top-3 right-3 p-2 rounded-md transition-colors duration-200 min-h-[40px] min-w-[40px] flex items-center justify-center ${
-                          isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
+                        className={`absolute top-2 right-2 p-2 rounded-md transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                          isDarkMode ? 'bg-gray-700/50 hover:bg-red-600 text-gray-300 hover:text-white' : 'bg-gray-200/50 hover:bg-red-500 text-gray-600 hover:text-white'
                         }`}
                         title="Delete chat"
                       >
-                        <Trash2 size={18} />
+                        <Trash2 size={16} />
                       </button>
                     )}
-                    <div className="flex items-center justify-between mb-2 pr-16">
+                    <div className="flex items-center justify-between mb-2 pr-12">
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         activeChat === item.id
                           ? isDarkMode ? 'bg-blue-700 text-blue-200' : 'bg-blue-200 text-blue-800'
@@ -110,10 +110,10 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                         {item.model}
                       </span>
                     </div>
-                    <h3 className={`text-sm font-medium mb-1 pr-16 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <h3 className={`text-sm font-medium mb-1 pr-12 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       {item.title}
                     </h3>
-                    <p className={`text-xs line-clamp-2 pr-16 ${
+                    <p className={`text-xs line-clamp-2 pr-12 ${
                       activeChat === item.id
                         ? isDarkMode ? 'text-gray-300' : 'text-gray-700'
                         : isDarkMode ? 'text-gray-400' : 'text-gray-600'
@@ -193,15 +193,15 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                         e.stopPropagation();
                         onDeleteChat(item.id);
                       }}
-                      className={`absolute top-2 right-2 p-1.5 rounded-md transition-colors duration-200 ${
-                        isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
+                      className={`absolute top-2 right-2 p-2 rounded-md transition-colors duration-200 min-h-[36px] min-w-[36px] flex items-center justify-center ${
+                        isDarkMode ? 'bg-gray-700/50 hover:bg-red-600 text-gray-300 hover:text-white' : 'bg-gray-200/50 hover:bg-red-500 text-gray-600 hover:text-white'
                       }`}
                       title="Delete chat"
                     >
                       <Trash2 size={16} />
                     </button>
                   )}
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between mb-1 pr-10">
                     <span className={`text-xs px-2 py-1 rounded-full ${
                       activeChat === item.id
                         ? isDarkMode ? 'bg-blue-700 text-blue-200' : 'bg-blue-200 text-blue-800'
@@ -210,10 +210,10 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                       {item.model}
                     </span>
                   </div>
-                  <h3 className={`text-sm font-medium mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <h3 className={`text-sm font-medium mb-1 pr-10 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                     {item.title}
                   </h3>
-                  <p className={`text-xs line-clamp-2 ${
+                  <p className={`text-xs line-clamp-2 pr-10 ${
                     activeChat === item.id
                       ? isDarkMode ? 'text-gray-300' : 'text-gray-700'
                       : isDarkMode ? 'text-gray-400' : 'text-gray-600'
