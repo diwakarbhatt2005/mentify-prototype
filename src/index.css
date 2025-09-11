@@ -116,6 +116,9 @@ div[class*="rounded-2xl"][class*="bg-gradient-to-br"] {
   outline: none !important;
   box-shadow: none !important;
   border-color: transparent !important;
+  border: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
 }
 
 /* Specifically target user message containers */
@@ -125,6 +128,28 @@ div[class*="rounded-2xl"][class*="bg-gradient-to-br"] {
   outline: none !important;
   box-shadow: none !important;
   border: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-focus-ring-color: transparent !important;
+}
+
+/* Force remove any webkit focus rings */
+div[class*="gradient"]::-webkit-focus-ring-color,
+div[class*="blue-"]::-webkit-focus-ring-color,
+div[class*="from-blue-500"]::-webkit-focus-ring-color,
+div[class*="to-blue-600"]::-webkit-focus-ring-color {
+  outline: none !important;
+  color: transparent !important;
+}
+
+/* Additional targeting for user message elements */
+*[class*="bg-gradient-to-br"][class*="from-blue-500"],
+*[class*="bg-gradient-to-br"][class*="to-blue-600"] {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
 /* Remove any potential webkit outlines */
