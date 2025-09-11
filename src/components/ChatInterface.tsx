@@ -487,17 +487,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
             {messages.map((msg) => (
               <div key={msg.id} className="group">
                 <div className={`flex items-start space-x-3 sm:space-x-4 ${msg.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
-                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-6 ${
-                    msg.type === 'user' 
-                      ? 'bg-gradient-to-br from-blue-500 to-blue-600'
-                      : isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                  }`}>
-                    {msg.type === 'user' ? (
-                      <User className="text-white" size={14} />
-                    ) : (
+                  {msg.type === 'bot' && (
+                    <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-6 ${
+                      isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                    }`}>
                       <Bot className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} size={14} />
-                    )}
-                  </div>
+                    </div>
+                  )}
                   
                   <div className={`flex-1 min-w-0 max-w-[75%] ${msg.type === 'user' ? 'flex flex-col items-end' : ''}`}>
                     <div className={`flex items-center mb-2 space-x-2 ${msg.type === 'user' ? 'justify-end' : ''}`}>
