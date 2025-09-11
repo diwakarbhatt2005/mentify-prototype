@@ -423,7 +423,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
       {/* Header */}
       <div className={`flex items-center justify-between p-3 sm:p-4 lg:p-6 border-b ${
         isDarkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'
-      } h-[57px] sm:h-[73px]`}>
+      } h-[60px] sm:h-[73px]`}>
         <div className="flex items-center space-x-2 sm:space-x-3">
           <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center ${
             isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
@@ -450,7 +450,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
               </div>
               <div className={`flex items-center space-x-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                <span className="text-xs">Online</span>
+                <span className="text-xs sm:text-xs">Online</span>
               </div>
             </div>
           </div>
@@ -630,18 +630,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
         
         {messages.length === 0 ? (
           // Welcome Screen
-          <div className="flex flex-col items-center justify-center h-full p-4 sm:p-6 lg:p-8 text-center min-h-[60vh]">
+          <div className="flex flex-col items-center justify-center h-full p-4 sm:p-6 lg:p-8 text-center min-h-[50vh] sm:min-h-[60vh]">
             <div className="w-full max-w-md mx-auto">
-              <h1 className={`text-lg sm:text-xl md:text-2xl font-bold mb-3 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 How can I help you today?
               </h1>
-              <p className={`text-sm sm:text-base mb-6 text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              <p className={`text-base sm:text-lg mb-6 text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 I'm {selectedModel}, your AI assistant. I can help with writing, analysis, coding, creative tasks, and much more.
               </p>
             </div>
             
             {/* Suggestion Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg mx-auto mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg mx-auto mb-8">
               {suggestions.map((suggestion, index) => {
                 const IconComponent = suggestion.icon;
                 return (
@@ -650,8 +650,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                     onClick={() => handleSuggestionClick(suggestion.text)}
                     className={`group p-4 sm:p-5 rounded-xl text-left transition-all duration-300 hover:scale-[1.02] hover:shadow-lg min-h-[80px] ${
                       isDarkMode 
-                        ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 hover:border-gray-600' 
-                        : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm hover:shadow-xl hover:border-gray-300'
+                        ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 hover:border-gray-600 shadow-lg' 
+                        : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-md hover:shadow-xl hover:border-gray-300'
                     }`}
                   >
                     <div className="flex items-center space-x-3 mb-2">
@@ -666,9 +666,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                             : 'text-gray-600 group-hover:text-blue-600'
                         }`} />
                       </div>
-                      <div className="text-sm sm:text-base font-semibold">{suggestion.text}</div>
+                      <div className="text-base sm:text-lg font-semibold">{suggestion.text}</div>
                     </div>
-                    <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                    <div className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
                       Click to get started
                     </div>
                   </button>
