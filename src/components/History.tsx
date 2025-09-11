@@ -93,9 +93,11 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                           e.stopPropagation();
                           onDeleteChat(item.id);
                         }}
-                        className={`absolute top-3 right-3 p-1.5 rounded-md transition-colors duration-200 focus:outline-none ${
+                        className={`absolute top-2 right-2 p-1.5 rounded-md transition-colors duration-200 ${
                           isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
                         }`}
+                        style={{ outline: 'none', boxShadow: 'none' }}
+                        style={{ outline: 'none', boxShadow: 'none' }}
                         title="Delete chat"
                       >
                         <Trash2 size={16} />
@@ -109,7 +111,7 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                       }`}>
                         {item.model}
                       </span>
-                      <span className={`text-xs mr-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      <span className={`text-xs mr-8 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         {item.timestamp}
                       </span>
                     </div>
