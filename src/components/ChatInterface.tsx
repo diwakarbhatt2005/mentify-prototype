@@ -454,8 +454,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                 </div>
               </div>
             )}
-            </div>
           </div>
+        </div>
         <div className="flex items-center space-x-1 sm:space-x-2">
           <button
             onClick={startNewChat}
@@ -798,22 +798,19 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
               >
                 <Paperclip size={16} />
               </button>
-            <div className="flex flex-col">
-              <div className="flex items-center space-x-2">
-                <h2 className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                  {selectedModel}
-                </h2>
-                <ChevronDown 
-                  size={14} 
-                  className={`transition-transform duration-300 ${isModelSelectorOpen ? 'rotate-180' : ''} ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} 
-                />
+              
+              <textarea
+                ref={textareaRef}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Type your message..."
+                className={`flex-1 resize-none bg-transparent border-none outline-none text-sm sm:text-base ${
+                  isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
                 }`}
-              <div className={`flex items-center space-x-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                <span className="text-xs">
-                  Online
-                </span>
-              </div>
+                rows={1}
+                style={{ maxHeight: '200px' }}
+              />
               
               <div className="flex items-center space-x-1">
                 <button
