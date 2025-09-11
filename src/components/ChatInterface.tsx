@@ -546,69 +546,25 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
       >
         {isDragOver && (
           <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-            <div className={`text-center p-8 rounded-2xl ${
+            <div className={`text-center p-4 rounded-xl ${
               isDarkMode ? 'bg-gray-800/90 text-white' : 'bg-white/90 text-gray-900'
             }`}>
-              <Paperclip size={48} className="mx-auto mb-4 text-blue-500" />
-              <h3 className="text-xl font-semibold mb-2">Drop your file here</h3>
-              <p className="text-sm opacity-70">Release to attach the file to your message</p>
+              <Paperclip size={32} className="mx-auto mb-2 text-blue-500" />
+              <h3 className="text-lg font-semibold mb-1">Drop file here</h3>
+              <p className="text-xs opacity-70">Release to attach</p>
             </div>
           </div>
         )}
         
         {messages.length === 0 ? (
           // Welcome Screen
-          <div className="flex flex-col items-center justify-center h-full p-4 sm:p-6 lg:p-8 text-center">
-            <h1 className={`text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          <div className="flex flex-col items-center justify-end h-full p-4 sm:p-6 lg:p-8 text-center pb-8">
+            <h1 className={`text-lg sm:text-xl font-bold mb-3 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               How can I help you today?
             </h1>
-            <p className={`text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 text-center max-w-2xl px-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p className={`text-sm mb-4 text-center max-w-xl px-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               I'm {selectedModel}, your AI assistant. I can help with writing, analysis, coding, creative tasks, and much more. 
-              You can type your message or use voice input.
             </p>
-            
-            {/* Suggested Prompts */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-4xl w-full px-4">
-              {[
-                {
-                  title: "Help me write an essay",
-                  description: "About AI chat applications",
-                  prompt: "Help me write an essay about AI chat applications"
-                },
-                {
-                  title: "Explain a concept",
-                  description: "Make complex topics simple",
-                  prompt: "Explain quantum computing in simple terms"
-                },
-                {
-                  title: "Code assistance",
-                  description: "Debug or write code",
-                  prompt: "Help me create a React component"
-                },
-                {
-                  title: "Creative writing",
-                  description: "Stories, poems, or scripts",
-                  prompt: "Write a short story about time travel"
-                }
-              ].map((suggestion, index) => (
-                <button
-                  key={index}
-                  onClick={() => setMessage(suggestion.prompt)}
-                  className={`p-3 sm:p-4 rounded-xl text-left transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
-                    isDarkMode 
-                      ? 'bg-gray-800 hover:bg-gray-750 border border-gray-700' 
-                      : 'bg-white hover:bg-gray-50 border border-gray-200 shadow-sm'
-                  }`}
-                >
-                  <h3 className={`text-sm sm:text-base font-semibold mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                    {suggestion.title}
-                  </h3>
-                  <p className={`text-xs sm:text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {suggestion.description}
-                  </p>
-                </button>
-              ))}
-            </div>
           </div>
         ) : (
           // Chat Messages
@@ -747,13 +703,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
       <div className={`${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
         {/* Suggestions */}
         {messages.length === 0 && (
-          <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 pt-3">
-            <div className="flex flex-wrap gap-2 mb-3">
-              {suggestions.map((suggestion, index) => (
+          <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 pt-2">
+            <div className="flex justify-end gap-2 mb-2">
+              {suggestions.slice(0, 2).map((suggestion, index) => (
                 <button
                   key={index}
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-all duration-200 hover:scale-105 ${
+                  className={`px-2 py-1 rounded-full text-xs transition-all duration-200 hover:scale-105 ${
                     isDarkMode 
                       ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700' 
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200'
@@ -766,10 +722,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
           </div>
         )}
         
-        <div className="max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 pb-safe">
+        <div className="max-w-4xl mx-auto p-2 sm:p-3 lg:p-4 pb-safe">
           {/* File attachment preview */}
           {attachedFile && (
-            <div className={`mb-3 p-3 rounded-lg border ${
+            <div className={`mb-2 p-2 rounded-lg border ${
               isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'
             }`}>
               <div className="flex items-center justify-between">
@@ -778,20 +734,20 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                     <img 
                       src={attachedFile.preview} 
                       alt="Preview" 
-                      className="w-12 h-12 rounded-lg object-cover"
+                      className="w-8 h-8 rounded object-cover"
                     />
                   ) : (
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                    <div className={`w-8 h-8 rounded flex items-center justify-center ${
                       isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
                     }`}>
                       {React.createElement(getFileIcon(attachedFile.type), { 
-                        size: 20, 
+                        size: 16, 
                         className: isDarkMode ? 'text-gray-300' : 'text-gray-600' 
                       })}
                     </div>
                   )}
                   <div>
-                    <p className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <p className={`text-xs font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       {attachedFile.file.name}
                     </p>
                     <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
@@ -801,11 +757,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                 </div>
                 <button
                   onClick={removeAttachment}
-                  className={`p-1.5 rounded-lg transition-colors duration-200 ${
+                  className={`p-1 rounded transition-colors duration-200 ${
                     isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
                   }`}
                 >
-                  <X size={16} />
+                  <X size={12} />
                 </button>
               </div>
             </div>
@@ -819,23 +775,23 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
               className="hidden"
               accept="image/*,.pdf,.doc,.docx,.txt"
             />
-            <div className={`flex items-center space-x-2 sm:space-x-3 flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl border transition-colors duration-200 ${
+            <div className={`flex items-center space-x-2 flex-1 px-3 py-2 rounded-xl border transition-colors duration-200 ${
               isDarkMode 
                 ? 'bg-gray-800 border-gray-700' 
                 : 'bg-gray-50 border-gray-200'
             }`}>
               <button 
                 onClick={handleFileInputClick}
-                className={`hidden sm:block p-1.5 sm:p-2 rounded-lg transition-colors duration-200 ${
+                className={`hidden sm:block p-1.5 rounded-lg transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
               }`}
                 title="Attach file"
               >
-                <Paperclip size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <Paperclip size={16} />
               </button>
               <button
                 onClick={handleFileInputClick}
-                className={`sm:hidden p-2 rounded-lg transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                className={`sm:hidden p-1.5 rounded-lg transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
                   isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
                 }`}
                 title="Attach file"
@@ -849,7 +805,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className={`flex-1 bg-transparent border-none outline-none resize-none max-h-32 py-1 text-base focus:outline-none focus:ring-0 focus:border-transparent ${
+                className={`flex-1 bg-transparent border-none outline-none resize-none max-h-20 py-1 text-sm focus:outline-none focus:ring-0 focus:border-transparent ${
                   isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
                 }`}
                 rows={1}
@@ -860,7 +816,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
               <div className="flex items-center space-x-1">
                 <button
                   onClick={toggleListening}
-                  className={`p-2 rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                  className={`p-1.5 rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
                     isListening
                       ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
                       : isDarkMode 
@@ -869,13 +825,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                   }`}
                   title={isListening ? 'Stop listening' : 'Start voice input'}
                 >
-                  {isListening ? <MicOff size={16} className="sm:w-[18px] sm:h-[18px]" /> : <Mic size={16} className="sm:w-[18px] sm:h-[18px]" />}
+                  {isListening ? <MicOff size={16} /> : <Mic size={16} />}
                 </button>
                 
                 <button
                   onClick={handleSendMessage}
                   disabled={!message.trim() || isTyping}
-                  className={`p-2 rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                  className={`p-1.5 rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
                     message.trim() && !isTyping
                       ? isDarkMode 
                         ? 'bg-blue-600 hover:bg-blue-700 text-white' 
@@ -886,7 +842,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                   }`}
                   title="Send message"
                 >
-                  <ArrowUp size={16} className="sm:w-[18px] sm:h-[18px]" />
+                  <ArrowUp size={16} />
                 </button>
               </div>
             </div>
