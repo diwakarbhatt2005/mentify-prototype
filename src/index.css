@@ -86,6 +86,16 @@ input:focus-visible {
 textarea:focus {
   outline: none !important;
   box-shadow: none !important;
+  border: none !important;
+}
+
+/* Remove all focus outlines from inputs and buttons */
+input:focus,
+button:focus,
+textarea:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: inherit !important;
 }
 
 /* Enhanced backdrop blur support */
