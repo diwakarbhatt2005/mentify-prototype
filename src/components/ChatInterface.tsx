@@ -498,13 +498,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                   {msg.type === 'user' && (
                     <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 outline-none border-none shadow-none ${
                       isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                    }`}>
+                    }`} style={{ marginTop: '0.125rem' }}>
                       <User className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} size={14} />
                     </div>
                   )}
                   
                   <div className={`flex-1 min-w-0 ${msg.type === 'user' ? 'max-w-[75%] flex flex-col items-end' : 'max-w-[75%]'}`}>
-                    <div className={`flex items-center mb-1 space-x-2 ${msg.type === 'user' ? 'justify-end' : ''}`}>
+                    <div className={`flex items-center mb-1 space-x-2 ${msg.type === 'user' ? 'justify-end' : ''}`} style={{ height: '1.25rem' }}>
                       <span className={`text-xs sm:text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {msg.type === 'user' ? 'You' : selectedModel}
                       </span>
