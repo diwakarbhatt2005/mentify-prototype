@@ -565,6 +565,23 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
             <p className={`text-sm mb-4 text-center max-w-xl px-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               I'm {selectedModel}, your AI assistant. I can help with writing, analysis, coding, creative tasks, and much more. 
             </p>
+            
+            {/* Suggestion Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl w-full px-4 mb-6">
+              {suggestions.map((suggestion, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleSuggestionClick(suggestion)}
+                  className={`p-4 rounded-xl text-left transition-all duration-200 hover:scale-[1.02] ${
+                    isDarkMode 
+                      ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700' 
+                      : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm hover:shadow-md'
+                  }`}
+                >
+                  <div className="text-sm font-medium">{suggestion}</div>
+                </button>
+              ))}
+            </div>
           </div>
         ) : (
           // Chat Messages
