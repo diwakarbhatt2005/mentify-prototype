@@ -111,9 +111,6 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                       }`}>
                         {item.model}
                       </span>
-                      <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {item.timestamp}
-                      </span>
                     </div>
                     <h3 className={`text-sm font-medium mb-1 pr-12 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       {item.title}
@@ -213,9 +210,6 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                         : isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'
                     }`}>
                       {item.model}
-                    </span>
-                    <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {item.timestamp}
                     </span>
                   </div>
                   <h3 className={`text-sm font-medium mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>

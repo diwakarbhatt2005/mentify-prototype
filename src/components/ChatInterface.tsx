@@ -503,10 +503,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                   
                   <div className={`flex-1 min-w-0 max-w-[75%] ${msg.type === 'user' ? 'flex flex-col items-end' : ''}`}>
                     <div className={`flex items-center mb-1 ${msg.type === 'user' ? 'justify-end space-x-4' : 'space-x-2'}`}>
-                      <span className={`text-xs sm:text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <span className={`text-xs sm:text-sm font-medium ${msg.type === 'user' ? 'order-2' : ''} ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {msg.type === 'user' ? 'You' : selectedModel}
                       </span>
-                      <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      <span className={`text-xs ${msg.type === 'user' ? 'order-1' : ''} ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         {formatTime(msg.timestamp)}
                       </span>
                     </div>

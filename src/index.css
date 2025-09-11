@@ -110,7 +110,6 @@ h3:focus {
 *:focus-within {
   outline: none !important;
   box-shadow: none !important;
-  border: none !important;
 }
 
 /* Remove webkit focus outlines */
@@ -125,7 +124,6 @@ div[role="button"]:focus,
 div[role="button"]:focus-visible {
   outline: none !important;
   box-shadow: none !important;
-  border: none !important;
 }
 
 /* Force remove all focus styles */
@@ -155,7 +153,6 @@ div[tabindex]:focus-visible,
 .bot-avatar:focus {
   outline: none !important;
   box-shadow: none !important;
-  border: none !important;
 }
 
 /* Remove focus from all interactive elements */
@@ -173,6 +170,24 @@ div[tabindex]:focus-visible,
 *:focus,
 *:focus-visible,
 *:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Specifically target message bubbles and user avatars to remove any outlines */
+.message-bubble,
+.user-message,
+.bot-message,
+.user-avatar,
+.bot-avatar {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Remove any focus states from message containers */
+div[class*="rounded-2xl"]:focus,
+div[class*="rounded-full"]:focus {
   outline: none !important;
   box-shadow: none !important;
 }
