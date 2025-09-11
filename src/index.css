@@ -147,6 +147,36 @@ button:focus {
   box-shadow: none !important;
 }
 
+/* Completely remove focus outlines from message bubbles and avatars */
+div[tabindex]:focus,
+div[tabindex]:focus-visible,
+.message-bubble:focus,
+.user-avatar:focus,
+.bot-avatar:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Remove focus from all interactive elements */
+*[tabindex]:focus,
+*[tabindex]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Force remove focus styles with highest specificity */
+* {
+  outline: none !important;
+}
+
+*:focus,
+*:focus-visible,
+*:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* Enhanced backdrop blur support */
 .backdrop-blur-xl {
   backdrop-filter: blur(24px);

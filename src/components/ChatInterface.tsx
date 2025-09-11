@@ -491,7 +491,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                     msg.type === 'user' 
                       ? 'bg-gradient-to-br from-blue-500 to-blue-600'
                       : isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                  }`}>
+                  }`}
+                  style={{ outline: 'none', boxShadow: 'none' }}
+                  tabIndex={-1}>
                     {msg.type === 'user' ? (
                       <User className="text-white" size={14} />
                     ) : (
@@ -500,7 +502,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                   </div>
                   
                   <div className={`flex-1 min-w-0 max-w-[75%] ${msg.type === 'user' ? 'flex flex-col items-end' : ''}`}>
-                    <div className={`flex items-center mb-1 ${msg.type === 'user' ? 'justify-end space-x-2' : 'space-x-2'}`}>
+                    <div className={`flex items-center mb-1 ${msg.type === 'user' ? 'justify-end space-x-3' : 'space-x-2'}`}>
                       <span className={`text-xs sm:text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {msg.type === 'user' ? 'You' : selectedModel}
                       </span>
@@ -515,7 +517,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                         : isDarkMode 
                           ? 'bg-gray-800 text-gray-100 rounded-bl-md' 
                           : 'bg-white text-gray-900 rounded-bl-md shadow-sm'
-                    }`}>
+                    }`}
+                    style={{ outline: 'none !important', boxShadow: msg.type === 'user' ? 'none' : undefined }}
+                    tabIndex={-1}>
                       <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap break-words">
                         {msg.content}
                       </p>
