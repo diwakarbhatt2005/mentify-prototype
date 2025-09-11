@@ -104,6 +104,17 @@ h3:focus {
   border-color: inherit !important;
 }
 
+/* Remove blue outlines from user message elements */
+.user-message-bubble,
+.user-avatar,
+div[class*="bg-gradient-to-br"]:focus,
+div[class*="from-blue-500"]:focus,
+div[class*="to-blue-600"]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
 /* Ensure no blue focus rings appear anywhere */
 *:focus,
 *:focus-visible,
@@ -117,15 +128,6 @@ h3:focus {
   outline: none !important;
 }
 
-/* Remove focus from clickable elements */
-button:focus,
-button:focus-visible,
-div[role="button"]:focus,
-div[role="button"]:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
 /* Force remove all focus styles */
 * {
   outline: none !important;
@@ -134,6 +136,16 @@ div[role="button"]:focus-visible {
 *:focus {
   outline: none !important;
   box-shadow: none !important;
+}
+
+/* Specifically target user message bubbles and profile icons */
+div[class*="rounded-full"][class*="bg-gradient-to-br"],
+div[class*="rounded-2xl"][class*="bg-gradient-to-br"],
+div[class*="from-blue-500"],
+div[class*="to-blue-600"] {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 button {
@@ -145,21 +157,12 @@ button:focus {
   box-shadow: none !important;
 }
 
-/* Completely remove focus outlines from message bubbles and avatars */
-div[tabindex]:focus,
-div[tabindex]:focus-visible,
-.message-bubble:focus,
-.user-avatar:focus,
-.bot-avatar:focus {
+/* Remove any potential outlines from user elements */
+*[class*="user"],
+*[class*="You"] {
   outline: none !important;
   box-shadow: none !important;
-}
-
-/* Remove focus from all interactive elements */
-*[tabindex]:focus,
-*[tabindex]:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
+  border: none !important;
 }
 
 /* Force remove focus styles with highest specificity */
