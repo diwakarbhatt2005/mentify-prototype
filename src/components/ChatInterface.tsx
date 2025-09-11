@@ -495,8 +495,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                     </div>
                   )}
                   
-                  <div className={`flex-1 min-w-0 max-w-[75%] ${msg.type === 'user' ? 'flex flex-col items-end' : ''}`}>
-                    <div className={`flex items-center mb-2 space-x-2 ${msg.type === 'user' ? 'justify-end' : ''}`}>
+                  {msg.type === 'user' && (
+                    <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 outline-none border-none shadow-none ${
+                      isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                    }`}>
+                      <User className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} size={14} />
+                    </div>
+                  )}
+                  
+                  <div className={`flex-1 min-w-0 ${msg.type === 'user' ? 'max-w-[75%] flex flex-col items-end' : 'max-w-[75%]'}`}>
+                    <div className={`flex items-center mb-1 space-x-2 ${msg.type === 'user' ? 'justify-end' : ''}`}>
                       <span className={`text-xs sm:text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {msg.type === 'user' ? 'You' : selectedModel}
                       </span>
@@ -505,9 +513,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                       </span>
                     </div>
                     
-                    <div className={`inline-block p-3 sm:p-4 rounded-2xl ${
+                    <div className={`inline-block px-3 py-2 sm:px-4 sm:py-3 rounded-2xl outline-none border-none shadow-none ${
                       msg.type === 'user'
-                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md'
+                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md max-w-fit'
                         : isDarkMode 
                           ? 'bg-gray-800 text-gray-100 rounded-bl-md border border-gray-700' 
                           : 'bg-white text-gray-900 rounded-bl-md border border-gray-200'

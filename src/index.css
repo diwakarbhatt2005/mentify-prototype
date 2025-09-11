@@ -192,6 +192,37 @@ div[class*="bg-gradient-to-br"]:focus {
   border: none !important;
 }
 
+/* Specific targeting for user message bubbles and profile icons */
+.group div[class*="bg-gradient-to-br"][class*="from-blue-500"],
+.group div[class*="rounded-full"][class*="from-gray-"],
+.group div[class*="max-w-fit"] {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove all possible focus states from user message elements */
+div[class*="from-blue-500"],
+div[class*="to-blue-600"],
+div[class*="rounded-full"][class*="from-gray-"],
+div[class*="max-w-fit"] {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Force remove webkit outlines */
+*[class*="bg-gradient-to-br"]:focus,
+*[class*="from-blue-500"]:focus,
+*[class*="to-blue-600"]:focus,
+*[class*="rounded-full"]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
 /* Enhanced backdrop blur support */
 .backdrop-blur-xl {
   backdrop-filter: blur(24px);
