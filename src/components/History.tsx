@@ -99,7 +99,7 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                           }`}
                           title="Delete chat"
                         >
-                          <Trash2 size={12} />
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     )}
@@ -203,7 +203,7 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                       }`}
                       title="Delete chat"
                     >
-                      <X size={14} />
+                      <Trash2 size={14} />
                     </button>
                   )}
                   <div className="flex items-center justify-between mb-1">
