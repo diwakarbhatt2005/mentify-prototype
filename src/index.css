@@ -92,23 +92,40 @@ textarea:focus {
 /* Remove all focus outlines from inputs and buttons */
 input:focus,
 button:focus,
-textarea:focus {
+textarea:focus,
+div:focus,
+span:focus,
+p:focus,
+h1:focus,
+h2:focus,
+h3:focus {
   outline: none !important;
   box-shadow: none !important;
   border-color: inherit !important;
 }
 
-/* Remove focus outlines from message bubbles and avatars */
-div:focus,
-span:focus {
+/* Ensure no blue focus rings appear anywhere */
+*:focus,
+*:focus-visible,
+*:focus-within {
   outline: none !important;
   box-shadow: none !important;
+  border: none !important;
 }
 
-/* Ensure no blue focus rings appear anywhere */
-*:focus {
+/* Remove webkit focus outlines */
+*::-webkit-focus-ring-color {
+  outline: none !important;
+}
+
+/* Remove focus from clickable elements */
+button:focus,
+button:focus-visible,
+div[role="button"]:focus,
+div[role="button"]:focus-visible {
   outline: none !important;
   box-shadow: none !important;
+  border: none !important;
 }
 
 /* Enhanced backdrop blur support */
