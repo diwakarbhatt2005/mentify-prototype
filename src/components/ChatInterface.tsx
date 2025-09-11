@@ -559,7 +559,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
         {messages.length === 0 ? (
           // Welcome Screen
           <div className="flex flex-col items-center justify-end h-full p-4 sm:p-6 lg:p-8 text-center pb-8">
-            <h1 className={`text-lg sm:text-xl font-bold mb-3 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            <h1 className={`text-xl sm:text-2xl font-bold mb-3 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               How can I help you today?
             </h1>
             <p className={`text-sm mb-4 text-center max-w-xl px-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
@@ -798,20 +798,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
               >
                 <Paperclip size={16} />
               </button>
-              
-              <textarea
-                ref={textareaRef}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className={`flex-1 bg-transparent border-none outline-none resize-none max-h-20 py-1 text-sm focus:outline-none focus:ring-0 focus:border-transparent ${
-                  isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
+            <div className="flex flex-col">
+              <div className="flex items-center space-x-2">
+                <h2 className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {selectedModel}
+                </h2>
+                <ChevronDown 
+                  size={14} 
+                  className={`transition-transform duration-300 ${isModelSelectorOpen ? 'rotate-180' : ''} ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} 
+                />
                 }`}
-                rows={1}
-                maxLength={2000}
-                disabled={isTyping}
-              />
+              <div className={`flex items-center space-x-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                <span className="text-xs">
+                  Online
+                </span>
+              </div>
               
               <div className="flex items-center space-x-1">
                 <button
