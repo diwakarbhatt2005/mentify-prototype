@@ -88,8 +88,6 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                   >
                     {/* Delete button - always visible */}
                     {onDeleteChat && (
-                    {/* Delete button - always visible */}
-                    {onDeleteChat && (
                       <div className="absolute top-2 right-2">
                         <button
                           onClick={(e) => {
@@ -138,103 +136,103 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
       {/* Desktop History Sidebar */}
       <div className={`w-80 h-full ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-r transition-colors duration-300 flex flex-col hidden lg:flex`}>
         <div className={`p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} h-[73px] flex items-center`}>
-        <div className="flex items-center justify-between">
-          <h2 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-            History
-          </h2>
-          <div className="flex space-x-2">
-            <button
-              onClick={onClearHistory}
-              className={`p-1.5 rounded-md transition-colors duration-200 ${
-                isDarkMode 
-                  ? 'text-gray-400 hover:text-white hover:bg-gray-800' 
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-              }`}
-              title="Clear History"
-            >
-              <Trash2 size={16} />
-            </button>
-            <button
-              className={`p-1.5 rounded-md transition-colors duration-200 ${
-                isDarkMode 
-                  ? 'text-gray-400 hover:text-white hover:bg-gray-800' 
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-              }`}
-              title="Export History"
-            >
-              <Download size={16} />
-            </button>
+          <div className="flex items-center justify-between w-full">
+            <h2 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              History
+            </h2>
+            <div className="flex space-x-2">
+              <button
+                onClick={onClearHistory}
+                className={`p-1.5 rounded-md transition-colors duration-200 ${
+                  isDarkMode 
+                    ? 'text-gray-400 hover:text-white hover:bg-gray-800' 
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                }`}
+                title="Clear History"
+              >
+                <Trash2 size={16} />
+              </button>
+              <button
+                className={`p-1.5 rounded-md transition-colors duration-200 ${
+                  isDarkMode 
+                    ? 'text-gray-400 hover:text-white hover:bg-gray-800' 
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                }`}
+                title="Export History"
+              >
+                <Download size={16} />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-        {history.length === 0 ? (
-          <div className="p-4 text-center">
-            <Clock className={`mx-auto mb-2 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`} size={24} />
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              No history yet
-            </p>
-          </div>
-        ) : (
-          <div className="p-2">
-            {history.map((item) => (
-              <div
-                key={item.id}
-                className={`p-3 mb-2 rounded-lg cursor-pointer transition-colors duration-200 relative group ${
-                  activeChat === item.id
-                    ? isDarkMode 
-                      ? 'bg-blue-600/20 border-l-4 border-l-blue-500 border border-gray-600' 
-                      : 'bg-blue-50/80 border-l-4 border-l-blue-500 border border-gray-300'
-                    : isDarkMode 
-                      ? 'hover:bg-gray-800 border border-gray-700' 
-                      : 'hover:bg-gray-50 border border-gray-200'
-                }`}
-                onMouseEnter={() => setHoveredChat(item.id)}
-                onMouseLeave={() => setHoveredChat(null)}
-              >
-                {/* Delete button */}
-                {hoveredChat === item.id && onDeleteChat && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteChat(item.id);
-                    }}
-                    className={`absolute top-2 right-2 p-1 rounded-md transition-colors duration-200 ${
-                      isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
-                    }`}
-                    title="Delete chat"
-                  >
-                    <X size={14} />
-                  </button>
-                )}
-                <div className="flex items-center justify-between mb-1">
-                  <span className={`text-xs px-2 py-1 rounded-full ${
+        
+        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+          {history.length === 0 ? (
+            <div className="p-4 text-center">
+              <Clock className={`mx-auto mb-2 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`} size={24} />
+              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                No history yet
+              </p>
+            </div>
+          ) : (
+            <div className="p-2">
+              {history.map((item) => (
+                <div
+                  key={item.id}
+                  className={`p-3 mb-2 rounded-lg cursor-pointer transition-colors duration-200 relative group ${
                     activeChat === item.id
-                      ? isDarkMode ? 'bg-blue-700 text-blue-200' : 'bg-blue-200 text-blue-800'
-                      : isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'
+                      ? isDarkMode 
+                        ? 'bg-blue-600/20 border-l-4 border-l-blue-500 border border-gray-600' 
+                        : 'bg-blue-50/80 border-l-4 border-l-blue-500 border border-gray-300'
+                      : isDarkMode 
+                        ? 'hover:bg-gray-800 border border-gray-700' 
+                        : 'hover:bg-gray-50 border border-gray-200'
+                  }`}
+                  onMouseEnter={() => setHoveredChat(item.id)}
+                  onMouseLeave={() => setHoveredChat(null)}
+                >
+                  {/* Delete button */}
+                  {hoveredChat === item.id && onDeleteChat && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteChat(item.id);
+                      }}
+                      className={`absolute top-2 right-2 p-1 rounded-md transition-colors duration-200 ${
+                        isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
+                      }`}
+                      title="Delete chat"
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
+                  <div className="flex items-center justify-between mb-1">
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      activeChat === item.id
+                        ? isDarkMode ? 'bg-blue-700 text-blue-200' : 'bg-blue-200 text-blue-800'
+                        : isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {item.model}
+                    </span>
+                    <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {item.timestamp}
+                    </span>
+                  </div>
+                  <h3 className={`text-sm font-medium mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    {item.title}
+                  </h3>
+                  <p className={`text-xs line-clamp-2 ${
+                    activeChat === item.id
+                      ? isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                      : isDarkMode ? 'text-gray-400' : 'text-gray-600'
                   }`}>
-                    {item.model}
-                  </span>
-                  <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                    {item.timestamp}
-                  </span>
+                    {item.summary}
+                  </p>
                 </div>
-                <h3 className={`text-sm font-medium mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                  {item.title}
-                </h3>
-                <p className={`text-xs line-clamp-2 ${
-                  activeChat === item.id
-                    ? isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                    : isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>
-                  {item.summary}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Mobile History Toggle Button */}
