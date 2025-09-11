@@ -43,14 +43,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, toggleTheme, selectedModel,
           </div>
 
           {/* Current Model Display */}
-          <div className="flex-1 text-center">
-            <div className={`text-base sm:text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              {selectedModel}
-            </div>
-            <div className={`text-xs sm:text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              {getModelDescription(selectedModel)}
-            </div>
-          </div>
+          <div className="flex-1"></div>
 
           {/* Navigation Items */}
           <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">

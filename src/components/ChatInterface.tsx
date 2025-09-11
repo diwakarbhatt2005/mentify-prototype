@@ -486,39 +486,37 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
           <div className="w-full max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6 flex-1 flex flex-col justify-center">
             {messages.map((msg) => (
               <div key={msg.id} className="group">
-                <div className={`flex items-start space-x-2 sm:space-x-4 ${msg.type === 'user' ? 'flex-row-reverse space-x-reverse justify-end' : ''}`}>
-                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                <div className={`flex items-start space-x-3 sm:space-x-4 ${msg.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                     msg.type === 'user' 
-                      ? isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
-                      : isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                      ? 'bg-gradient-to-br from-blue-500 to-blue-600 shadow-md'
+                      : isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-100 to-gray-200'
                   }`}>
                     {msg.type === 'user' ? (
-                      <User className="text-white" size={12} />
+                      <User className="text-white" size={14} />
                     ) : (
-                      <Bot className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} size={12} />
+                      <Bot className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} size={14} />
                     )}
                   </div>
                   
-                  <div className={`flex-1 min-w-0 ${msg.type === 'user' ? 'flex flex-col items-end' : ''}`}>
-                    <div className={`flex items-center space-x-1 sm:space-x-2 mb-1 ${msg.type === 'user' ? 'justify-end' : ''}`}>
+                  <div className={`flex-1 min-w-0 max-w-[75%] ${msg.type === 'user' ? 'flex flex-col items-end' : ''}`}>
+                    <div className={`flex items-center space-x-2 mb-2 ${msg.type === 'user' ? 'justify-end' : ''}`}>
                       <span className={`text-xs sm:text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         {msg.type === 'user' ? 'You' : selectedModel}
                       </span>
-                      <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                      <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         {formatTime(msg.timestamp)}
                       </span>
                     </div>
                     
-                    <div className={`inline-block max-w-[85%] sm:max-w-[80%] p-2.5 sm:p-3 rounded-2xl ${
+                    <div className={`inline-block p-3 sm:p-4 rounded-2xl shadow-sm ${
                       msg.type === 'user'
-                        ? isDarkMode 
-                          ? 'bg-blue-600 text-white' 
-                          : 'bg-blue-500 text-white'
+                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md'
                         : isDarkMode 
-                          ? 'bg-gray-800 text-gray-100' 
-                          : 'bg-gray-100 text-gray-900'
-                    } ${msg.type === 'user' ? 'rounded-br-md ml-auto' : 'rounded-bl-md'}`}>
-                      <p className="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words text-left">
+                          ? 'bg-gray-800 text-gray-100 rounded-bl-md border border-gray-700' 
+                          : 'bg-white text-gray-900 rounded-bl-md border border-gray-200'
+                    }`}>
+                      <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap break-words">
                         {msg.content}
                       </p>
                     </div>

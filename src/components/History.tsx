@@ -86,20 +86,24 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                     onMouseEnter={() => setHoveredChat(item.id)}
                     onMouseLeave={() => setHoveredChat(null)}
                   >
-                    {/* Delete button */}
-                    {hoveredChat === item.id && onDeleteChat && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDeleteChat(item.id);
-                        }}
-                        className={`absolute top-2 right-2 p-1 rounded-md transition-colors duration-200 ${
-                          isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
-                        }`}
-                        title="Delete chat"
-                      >
-                        <X size={14} />
-                      </button>
+                    {/* Delete button - always visible */}
+                    {onDeleteChat && (
+                    {/* Delete button - always visible */}
+                    {onDeleteChat && (
+                      <div className="absolute top-2 right-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeleteChat(item.id);
+                          }}
+                          className={`p-1 rounded-md transition-colors duration-200 ${
+                            isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
+                          }`}
+                          title="Delete chat"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
                     )}
                     <div className="flex items-center justify-between mb-1">
                       <span className={`text-xs px-2 py-1 rounded-full ${
