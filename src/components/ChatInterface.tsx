@@ -513,9 +513,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                       </span>
                     </div>
                     
-                    <div className={`inline-block px-3 py-2 sm:px-4 sm:py-3 rounded-2xl outline-none border-none shadow-none ${
+                    <div className={`inline-block px-3 py-2 sm:px-4 sm:py-3 rounded-2xl ${
                       msg.type === 'user'
-                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md max-w-fit'
+                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md max-w-fit !outline-none !border-none !shadow-none !ring-0'
                         : isDarkMode 
                           ? 'bg-gray-800 text-gray-100 rounded-bl-md border border-gray-700' 
                           : 'bg-white text-gray-900 rounded-bl-md border border-gray-200'

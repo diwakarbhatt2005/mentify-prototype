@@ -223,6 +223,20 @@ div[class*="max-w-fit"] {
   box-shadow: none !important;
   border: none !important;
 }
+
+/* Nuclear option for user message elements */
+div[class*="bg-gradient-to-br"][class*="from-blue-500"],
+div[class*="bg-gradient-to-br"][class*="to-blue-600"],
+*[class*="from-blue-500"],
+*[class*="to-blue-600"] {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-focus-ring-color: transparent !important;
+}
 /* Enhanced backdrop blur support */
 .backdrop-blur-xl {
   backdrop-filter: blur(24px);
