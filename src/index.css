@@ -167,6 +167,47 @@ div[class*="rounded-2xl"] {
   -moz-appearance: none !important;
 }
 
+/* NUCLEAR OPTION - Remove ALL blue outlines from EVERYTHING */
+* {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-focus-ring-color: transparent !important;
+}
+
+*:focus,
+*:active,
+*:hover,
+*:visited {
+  outline: none !important;
+  border-color: inherit !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Specifically target user message elements with MAXIMUM force */
+div[class*="from-blue-500"],
+div[class*="to-blue-600"],
+div[class*="bg-gradient-to-br"] {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-focus-ring-color: transparent !important;
+}
+
+/* Remove focus rings from all elements */
+*::-moz-focus-inner {
+  border: 0 !important;
+  outline: none !important;
+}
+
+*::-webkit-focus-ring-color {
+  outline: none !important;
+  color: transparent !important;
+}
+
 /* Enhanced backdrop blur support */
 .backdrop-blur-xl {
   backdrop-filter: blur(24px);
