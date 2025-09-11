@@ -93,12 +93,12 @@ const History: React.FC<HistoryProps> = ({ isDarkMode, history, activeChat, onCl
                           e.stopPropagation();
                           onDeleteChat(item.id);
                         }}
-                        className={`absolute top-2 right-2 p-1 rounded-md transition-colors duration-200 ${
+                        className={`absolute top-2 right-2 p-1.5 rounded-md transition-colors duration-200 ${
                           isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'
                         }`}
                         title="Delete chat"
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={16} />
                       </button>
                     )}
                     <div className="flex items-center justify-between mb-1">

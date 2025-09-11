@@ -98,6 +98,19 @@ textarea:focus {
   border-color: inherit !important;
 }
 
+/* Remove focus outlines from message bubbles and avatars */
+div:focus,
+span:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure no blue focus rings appear anywhere */
+*:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* Enhanced backdrop blur support */
 .backdrop-blur-xl {
   backdrop-filter: blur(24px);
