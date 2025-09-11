@@ -632,7 +632,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
           // Welcome Screen
           <div className="flex flex-col items-center justify-center h-full p-4 sm:p-6 lg:p-8 text-center min-h-[60vh] sm:min-h-[70vh]">
             <div className="w-full max-w-md mx-auto">
-              <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h1 className={`text-xl sm:text-2xl md:text-2xl font-bold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 How can I help you today?
               </h1>
               <p className={`text-sm sm:text-base mb-6 text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
@@ -641,32 +641,32 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
             </div>
             
             {/* Suggestion Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-md mx-auto mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-sm mx-auto mb-8">
               {suggestions.map((suggestion, index) => {
                 const IconComponent = suggestion.icon;
                 return (
                   <button
                     key={index}
                     onClick={() => handleSuggestionClick(suggestion.text)}
-                    className={`group p-3 sm:p-4 rounded-lg text-left transition-all duration-300 hover:scale-[1.02] hover:shadow-lg min-h-[70px] ${
+                    className={`group p-2 sm:p-3 rounded-lg text-left transition-all duration-300 hover:scale-[1.02] hover:shadow-lg min-h-[60px] ${
                       isDarkMode 
                         ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 hover:border-gray-600 shadow-lg' 
                         : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-md hover:shadow-xl hover:border-gray-300'
                     }`}
                   >
-                    <div className="flex items-center space-x-2 mb-2">
+                    <div className="flex items-center space-x-2 mb-1">
                       <div className={`p-1.5 rounded-md transition-colors duration-300 ${
                         isDarkMode 
                           ? 'bg-gray-700 group-hover:bg-gray-600' 
                           : 'bg-gray-100 group-hover:bg-blue-100'
                       }`}>
-                        <IconComponent size={14} className={`transition-colors duration-300 ${
+                        <IconComponent size={12} className={`transition-colors duration-300 ${
                           isDarkMode 
                             ? 'text-gray-400 group-hover:text-gray-300' 
                             : 'text-gray-600 group-hover:text-blue-600'
                         }`} />
                       </div>
-                      <div className="text-sm sm:text-base font-semibold">{suggestion.text}</div>
+                      <div className="text-xs sm:text-sm font-semibold">{suggestion.text}</div>
                     </div>
                     <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
                       Click to get started
