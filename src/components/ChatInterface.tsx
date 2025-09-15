@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Send, Volume2, VolumeX, Bot, User, Copy, RefreshCw, Plus, Paperclip, ArrowUp, ChevronDown, Lock, Check, Zap, Brain, Sparkles, X, FileText, Image as ImageIcon, File, Edit3, Lightbulb, FileSearch, Palette, Clock } from 'lucide-react';
+import { Mic, MicOff, Volume2, VolumeX, Bot, Copy, RefreshCw, Plus, Paperclip, ArrowUp, ChevronDown, Lock, Check, Zap, Brain, Sparkles, X, FileText, Image as ImageIcon, File, Edit3, Lightbulb, FileSearch, Palette, Clock } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -93,7 +93,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
     },
   ];
 
-  const currentBuddy = buddies.find(b => b.name === selectedModel) || buddies[0];
   
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -307,7 +306,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
   };
 
   // Generate contextual suggestions based on conversation
-  const generateContextualSuggestions = (lastBotMessage: string) => {
+  const generateContextualSuggestions = () => {
     const suggestions = [
       "Make it shorter",
       "Explain it simply", 
@@ -353,7 +352,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
 
       setMessages(prev => [...prev, botResponse]);
       setIsTyping(false);
-      generateContextualSuggestions(botResponse.content);
+      generateContextualSuggestions();
     }, 1000 + Math.random() * 2000);
   };
 
@@ -749,27 +748,29 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                     )}
                     
                     {/* Message Actions */}
-                    <div className={`flex items-center space-x-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200`}>
+                    <div className={`flex items-center space-x-0.5 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200`}>
                       <button
                         onClick={() => copyMessage(msg.content)}
-                        className={`p-2 rounded transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                        className={`p-1 rounded transition-colors duration-200 min-h-[28px] min-w-[28px] flex items-center justify-center ${
                           isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-gray-200' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-700'
                         }`}
                         title="Copy message"
+                        style={{ marginTop: '2px' }}
                       >
-                        <Copy size={8} />
+                        <Copy size={15} />
                       </button>
                       {msg.type === 'bot' && (
                         <button
                           onClick={() => toggleSpeaking(msg.content)}
-                          className={`p-2 rounded transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                          className={`p-1 rounded transition-colors duration-200 min-h-[28px] min-w-[28px] flex items-center justify-center ${
                             isSpeaking 
                               ? 'bg-green-500 text-white' 
                               : isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-gray-200' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-700'
                           }`}
                           title="Read aloud"
+                          style={{ marginTop: '2px' }}
                         >
-                          {isSpeaking ? <VolumeX size={8} /> : <Volume2 size={8} />}
+                          {isSpeaking ? <VolumeX size={15} /> : <Volume2 size={15} />}
                         </button>
                       )}
                     </div>
