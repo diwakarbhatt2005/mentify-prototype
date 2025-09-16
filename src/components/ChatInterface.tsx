@@ -639,7 +639,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                 <h3 className={`text-xl font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                   Drop files here
                 </h3>
-                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : \'text-gray-600'}`}>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   Release to attach to your message
                 </p>
               </div>
