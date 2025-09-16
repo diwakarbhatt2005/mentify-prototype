@@ -449,7 +449,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
               </div>
               <div className={`flex items-center space-x-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                <span className="text-xs sm:text-xs">Online</span>
+                <span className="text-xs">Online</span>
               </div>
             </div>
           </div>
@@ -604,354 +604,475 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
         </div>
       )}
 
-      {/* Messages Area */}
+      {/* Main Content Area */}
       <div 
-        className={`flex-1 overflow-y-auto transition-all duration-200 relative ${
+        className={`flex-1 flex flex-col relative transition-all duration-200 ${
           isDragOver 
-            ? 'bg-black/50'
-            : isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+            ? ''
+            : isDarkMode ? 'bg-gray-900' : 'bg-white'
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
+        {/* Modern Drag Over Overlay */}
         {isDragOver && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10 pointer-events-none">
-            <div className={`text-center p-6 rounded-2xl border-2 border-dashed ${
+          <div className="absolute inset-0 z-20 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
+            <div className={`relative z-10 text-center p-8 rounded-3xl border-2 border-dashed border-blue-400 ${
               isDarkMode ? 'bg-gray-800/90 text-white' : 'bg-white/90 text-gray-900'
-            } border-blue-500`}>
-              <Paperclip size={48} className="mx-auto mb-4 text-blue-500" />
-              <h3 className="text-xl font-bold mb-2">Drop your files here</h3>
-              <p className="text-sm opacity-70">Release to attach files</p>
+            } shadow-2xl`}>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-500/20 flex items-center justify-center">
+                <Paperclip size={32} className="text-blue-500" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Drop files to upload</h3>
+              <p className="text-sm opacity-70">Release to attach your files</p>
             </div>
           </div>
         )}
         
         {messages.length === 0 ? (
-          // Welcome Screen
-          <div className="flex flex-col items-center justify-center h-full p-4 sm:p-6 lg:p-8 text-center min-h-[60vh] sm:min-h-[70vh]">
-            <div className="w-full max-w-md mx-auto">
-              <h1 className={`text-xl sm:text-2xl md:text-2xl font-bold mb-4 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                How can I help you today?
-              </h1>
-              <p className={`text-sm sm:text-base mb-6 text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                I'm {selectedModel}, your AI assistant. I can help with writing, analysis, coding, creative tasks, and much more.
-              </p>
-            </div>
-            
-            {/* Suggestion Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-sm mx-auto mb-8">
-              {suggestions.map((suggestion, index) => {
-                const IconComponent = suggestion.icon;
-                return (
-                  <button
-                    key={index}
-                    onClick={() => handleSuggestionClick(suggestion.text)}
-                    className={`group p-2 sm:p-3 rounded-lg text-left transition-all duration-300 hover:scale-[1.02] hover:shadow-lg min-h-[60px] ${
-                      isDarkMode 
-                        ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 hover:border-gray-600 shadow-lg' 
-                        : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-md hover:shadow-xl hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-2 mb-1">
-                      <div className={`p-1.5 rounded-md transition-colors duration-300 ${
-                        isDarkMode 
-                          ? 'bg-gray-700 group-hover:bg-gray-600' 
-                          : 'bg-gray-100 group-hover:bg-blue-100'
-                      }`}>
-                        <IconComponent size={12} className={`transition-colors duration-300 ${
+          // Non-scrollable Welcome Header
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+              <div className="w-full max-w-2xl mx-auto">
+                <h1 className={`text-3xl sm:text-4xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  How can I help you today?
+                </h1>
+                <p className={`text-sm sm:text-base mb-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  I'm {selectedModel}, your AI assistant. I can help with writing, analysis, coding, creative tasks, and much more.
+                </p>
+                
+                {/* Modern Suggestion Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-md mx-auto mb-6">
+                  {suggestions.map((suggestion, index) => {
+                    const IconComponent = suggestion.icon;
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => handleSuggestionClick(suggestion.text)}
+                        className={`group p-3 rounded-lg text-left transition-all duration-300 hover:scale-[1.02] hover:shadow-md border min-h-[60px] ${
                           isDarkMode 
-                            ? 'text-gray-400 group-hover:text-gray-300' 
-                            : 'text-gray-600 group-hover:text-blue-600'
-                        }`} />
+                            ? 'bg-gray-800/50 hover:bg-gray-800 text-gray-300 border-gray-700/50 hover:border-gray-600 shadow-lg hover:shadow-2xl' 
+                            : 'bg-gray-50/80 hover:bg-white text-gray-700 border-gray-200/50 hover:border-gray-300 shadow-sm hover:shadow-lg'
+                        }`}
+                      >
+                        <div className="flex items-start space-x-2">
+                          <div className={`p-1.5 rounded-md transition-all duration-300 ${
+                            isDarkMode 
+                              ? 'bg-gray-700/50 group-hover:bg-blue-600/20' 
+                              : 'bg-white group-hover:bg-blue-50'
+                          }`}>
+                            <IconComponent size={14} className={`transition-colors duration-300 ${
+                              isDarkMode 
+                                ? 'text-gray-400 group-hover:text-blue-400' 
+                                : 'text-gray-600 group-hover:text-blue-600'
+                            }`} />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-medium text-sm mb-1">{suggestion.text}</div>
+                            <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                              Click to get started
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                {/* Input Field - No Container */}
+                <div className="w-full max-w-2xl mx-auto">
+                  {/* File Attachments Preview */}
+                  {attachedFiles.length > 0 && (
+                    <div className="mb-3">
+                      <div className="flex flex-wrap gap-2">
+                        {attachedFiles.map((attachedFile, index) => (
+                          <div key={index} className="flex items-center space-x-2 relative group">
+                            {attachedFile.type === 'image' && attachedFile.preview ? (
+                              <img 
+                                src={attachedFile.preview} 
+                                alt="Preview" 
+                                className="w-10 h-10 rounded-lg object-cover"
+                              />
+                            ) : (
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                                isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                              }`}>
+                                {React.createElement(getFileIcon(attachedFile.type), { 
+                                  size: 16, 
+                                  className: isDarkMode ? 'text-gray-300' : 'text-gray-600' 
+                                })}
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className={`text-xs font-medium truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                {attachedFile.file.name}
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => removeAttachment(index)}
+                              className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-200 ${
+                                isDarkMode ? 'bg-gray-600 hover:bg-red-600 text-gray-300 hover:text-white' : 'bg-gray-300 hover:bg-red-500 text-gray-600 hover:text-white'
+                              }`}
+                            >
+                              <X size={10} />
+                            </button>
+                          </div>
+                        ))}
                       </div>
-                      <div className="text-xs sm:text-sm font-semibold">{suggestion.text}</div>
-                    </div>
-                    <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                      Click to get started
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ) : (
-          // Chat Messages
-          <div className="w-full max-w-4xl mx-auto p-3 sm:p-4 lg:p-6 space-y-3 sm:space-y-4 flex-1">
-            {messages.map((msg) => (
-              <div key={msg.id} className="group">
-                <div className={`flex items-start space-x-2 sm:space-x-3 ${msg.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
-                  {msg.type === 'bot' && (
-                    <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-6 ${
-                      isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                    }`}>
-                      <Bot className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} size={12} />
                     </div>
                   )}
                   
-                  <div className={`flex-1 min-w-0 ${msg.type === 'user' ? 'max-w-[85%] flex flex-col items-end' : 'max-w-[85%]'}`}>
-                    <div className={`flex items-center mb-1 space-x-2 ${msg.type === 'user' ? 'justify-end' : ''}`} style={{ height: '1.25rem' }}>
-                      <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        {msg.type === 'user' ? 'You' : selectedModel}
-                      </span>
-                      <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {formatTime(msg.timestamp)}
-                      </span>
-                    </div>
-                    
-                    <div className={`inline-block px-3 py-2 sm:px-4 sm:py-3 rounded-2xl ${
-                      msg.type === 'user'
-                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md max-w-fit'
-                        : isDarkMode 
-                          ? 'bg-gray-800 text-gray-100 rounded-bl-md border border-gray-700' 
-                          : 'bg-white text-gray-900 rounded-bl-md border border-gray-200'
+                  {/* Input Field - Direct, No Container */}
+                  <div className="relative flex items-center">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      onChange={handleFileInputChange}
+                      className="hidden"
+                      accept="image/*,.pdf,.doc,.docx,.txt"
+                      multiple
+                    />
+                    <div className={`flex items-center space-x-3 flex-1 px-4 py-3 rounded-2xl border transition-all duration-200 ${
+                      isDarkMode 
+                        ? 'bg-gray-800 border-gray-700' 
+                        : 'bg-gray-50 border-gray-200'
                     }`}>
-                      {msg.attachments && msg.attachments.length > 0 && (
-                        <div className="mb-2 space-y-2">
-                          {msg.attachments.map((attachment, index) => (
-                            <div key={index}>
-                              {attachment.type === 'image' && attachment.preview ? (
-                                <img 
-                                  src={attachment.preview} 
-                                  alt="Attachment" 
-                                  className="max-w-xs max-h-48 rounded-lg object-cover"
-                                />
-                              ) : (
-                                <div className={`flex items-center space-x-2 p-2 rounded-lg ${
-                                  msg.type === 'user' ? 'bg-white/20' : isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-                                }`}>
-                                  {React.createElement(getFileIcon(attachment.type), { 
-                                    size: 14, 
-                                    className: msg.type === 'user' ? 'text-white' : isDarkMode ? 'text-gray-300' : 'text-gray-600' 
-                                  })}
-                                  <span className={`text-xs ${
-                                    msg.type === 'user' ? 'text-white' : isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                                  }`}>
-                                    {attachment.file.name}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
-                        {msg.content}
-                      </p>
+                      <button 
+                        onClick={handleFileInputClick}
+                        className={`p-2 rounded-xl transition-colors duration-200 ${
+                        isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
+                      }`}
+                        title="Attach file"
+                      >
+                        <Paperclip size={18} />
+                      </button>
+                      
+                      <textarea
+                        ref={textareaRef}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="Type your message..."
+                        className={`flex-1 resize-none bg-transparent border-none outline-none text-sm leading-relaxed ${
+                          isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
+                        }`}
+                        rows={1}
+                        style={{ maxHeight: '120px', fontSize: '16px' }}
+                      />
+                      
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={toggleListening}
+                          className={`p-2 rounded-xl transition-all duration-200 ${
+                            isListening
+                              ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
+                              : isDarkMode 
+                                ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
+                                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
+                          }`}
+                          title={isListening ? 'Stop listening' : 'Start voice input'}
+                        >
+                          {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                        </button>
+                        
+                        <button
+                          onClick={handleSendMessage}
+                          disabled={!message.trim() || isTyping}
+                          className={`p-2 rounded-xl transition-all duration-200 ${
+                            message.trim() && !isTyping
+                              ? isDarkMode 
+                                ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                                : 'bg-blue-500 hover:bg-blue-600 text-white'
+                              : isDarkMode 
+                                ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
+                                : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+                          }`}
+                          title="Send message"
+                        >
+                          <ArrowUp size={18} />
+                        </button>
+                      </div>
                     </div>
-                    
-                    {msg.isVoice && (
-                      <div className={`flex items-center mt-2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                        <Mic size={12} className="mr-1" />
-                        Voice message
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          // Scrollable Chat Messages
+          <div className="flex-1 overflow-y-auto">
+            <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
+              {messages.map((msg) => (
+                <div key={msg.id} className="group">
+                  <div className={`flex items-start space-x-4 ${msg.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                    {msg.type === 'bot' && (
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 ${
+                        isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                      }`}>
+                        <Bot className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} size={14} />
                       </div>
                     )}
                     
-                    {/* Message Actions */}
-                    <div className={`flex items-center space-x-0.5 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200`}>
-                      <button
-                        onClick={() => copyMessage(msg.content)}
-                        className={`p-1 rounded transition-colors duration-200 min-h-[28px] min-w-[28px] flex items-center justify-center ${
-                          isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-gray-200' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-700'
-                        }`}
-                        title="Copy message"
-                        style={{ marginTop: '2px' }}
-                      >
-                        <Copy size={15} />
-                      </button>
-                      {msg.type === 'bot' && (
-                        <button
-                          onClick={() => toggleSpeaking(msg.content)}
-                          className={`p-1 rounded transition-colors duration-200 min-h-[28px] min-w-[28px] flex items-center justify-center ${
-                            isSpeaking 
-                              ? 'bg-green-500 text-white' 
-                              : isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-gray-200' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-700'
-                          }`}
-                          title="Read aloud"
-                          style={{ marginTop: '2px' }}
-                        >
-                          {isSpeaking ? <VolumeX size={15} /> : <Volume2 size={15} />}
-                        </button>
+                    <div className={`flex-1 min-w-0 ${msg.type === 'user' ? 'max-w-[85%] flex flex-col items-end' : 'max-w-[85%]'}`}>
+                      <div className={`flex items-center mb-2 space-x-2 ${msg.type === 'user' ? 'justify-end' : ''}`}>
+                        <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          {msg.type === 'user' ? 'You' : selectedModel}
+                        </span>
+                        <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {formatTime(msg.timestamp)}
+                        </span>
+                      </div>
+                      
+                      <div className={`inline-block px-4 py-3 rounded-2xl ${
+                        msg.type === 'user'
+                          ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md max-w-fit'
+                          : isDarkMode 
+                            ? 'bg-gray-800 text-gray-100 rounded-bl-md border border-gray-700' 
+                            : 'bg-gray-50 text-gray-900 rounded-bl-md border border-gray-200'
+                      }`}>
+                        {msg.attachments && msg.attachments.length > 0 && (
+                          <div className="mb-3 space-y-2">
+                            {msg.attachments.map((attachment, index) => (
+                              <div key={index}>
+                                {attachment.type === 'image' && attachment.preview ? (
+                                  <img 
+                                    src={attachment.preview} 
+                                    alt="Attachment" 
+                                    className="max-w-xs max-h-48 rounded-lg object-cover"
+                                  />
+                                ) : (
+                                  <div className={`flex items-center space-x-2 p-2 rounded-lg ${
+                                    msg.type === 'user' ? 'bg-white/20' : isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                                  }`}>
+                                    {React.createElement(getFileIcon(attachment.type), { 
+                                      size: 16, 
+                                      className: msg.type === 'user' ? 'text-white' : isDarkMode ? 'text-gray-300' : 'text-gray-600' 
+                                    })}
+                                    <span className={`text-sm ${
+                                      msg.type === 'user' ? 'text-white' : isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                                    }`}>
+                                      {attachment.file.name}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+                          {msg.content}
+                        </p>
+                      </div>
+                      
+                      {msg.isVoice && (
+                        <div className={`flex items-center mt-2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          <Mic size={12} className="mr-1" />
+                          Voice message
+                        </div>
                       )}
+                      
+                      {/* Message Actions - Positioned directly below message */}
+                      <div className={`flex items-center space-x-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200`}>
+                        <button
+                          onClick={() => copyMessage(msg.content)}
+                          className={`p-1.5 rounded transition-colors duration-200 min-h-[32px] min-w-[32px] flex items-center justify-center ${
+                            isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-gray-200' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-700'
+                          }`}
+                          title="Copy message"
+                        >
+                          <Copy size={14} />
+                        </button>
+                        {msg.type === 'bot' && (
+                          <button
+                            onClick={() => toggleSpeaking(msg.content)}
+                            className={`p-1.5 rounded transition-colors duration-200 min-h-[32px] min-w-[32px] flex items-center justify-center ${
+                              isSpeaking 
+                                ? 'bg-green-500 text-white' 
+                                : isDarkMode ? 'hover:bg-gray-700 text-gray-400 hover:text-gray-200' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-700'
+                            }`}
+                            title="Read aloud"
+                          >
+                            {isSpeaking ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-            
-            {/* Typing indicator */}
-            {isTyping && (
-              <div className="group">
-                <div className="flex items-start space-x-2 sm:space-x-4">
-                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center ${
-                    isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
-                  }`}>
-                    <Bot className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} size={12} />
-                  </div>
-                  <div className="flex-1">
-                    <div className={`flex items-center space-x-1 sm:space-x-2 mb-2`}>
-                      <span className={`text-xs sm:text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        {selectedModel}
-                      </span>
-                    </div>
-                    <div className="flex space-x-1">
-                      <div className={`w-2 h-2 rounded-full animate-bounce ${
-                        isDarkMode ? 'bg-gray-400' : 'bg-gray-500'
-                      }`} style={{ animationDelay: '0ms' }}></div>
-                      <div className={`w-2 h-2 rounded-full animate-bounce ${
-                        isDarkMode ? 'bg-gray-400' : 'bg-gray-500'
-                      }`} style={{ animationDelay: '150ms' }}></div>
-                      <div className={`w-2 h-2 rounded-full animate-bounce ${
-                        isDarkMode ? 'bg-gray-400' : 'bg-gray-500'
-                      }`} style={{ animationDelay: '300ms' }}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-        )}
-      </div>
-
-      {/* Input Area */}
-      <div className={`${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
-        {/* Dynamic Contextual Suggestions */}
-        {contextualSuggestions.length > 0 && (
-          <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 pt-2">
-            <div className="flex justify-end gap-2 mb-2">
-              {contextualSuggestions.slice(0, 2).map((suggestion, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  className={`px-2 py-1 rounded-full text-xs transition-all duration-200 hover:scale-105 ${
-                    isDarkMode 
-                      ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700' 
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200'
-                  }`}
-                >
-                  {suggestion}
-                </button>
               ))}
+              
+              {/* Typing indicator */}
+              {isTyping && (
+                <div className="group">
+                  <div className="flex items-start space-x-4">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                    }`}>
+                      <Bot className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} size={14} />
+                    </div>
+                    <div className="flex-1">
+                      <div className={`flex items-center space-x-2 mb-2`}>
+                        <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          {selectedModel}
+                        </span>
+                      </div>
+                      <div className="flex space-x-1">
+                        <div className={`w-2 h-2 rounded-full animate-bounce ${
+                          isDarkMode ? 'bg-gray-400' : 'bg-gray-500'
+                        }`} style={{ animationDelay: '0ms' }}></div>
+                        <div className={`w-2 h-2 rounded-full animate-bounce ${
+                          isDarkMode ? 'bg-gray-400' : 'bg-gray-500'
+                        }`} style={{ animationDelay: '150ms' }}></div>
+                        <div className={`w-2 h-2 rounded-full animate-bounce ${
+                          isDarkMode ? 'bg-gray-400' : 'bg-gray-500'
+                        }`} style={{ animationDelay: '300ms' }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
             </div>
           </div>
         )}
-        
-        <div className="max-w-4xl mx-auto p-3 sm:p-4 pb-safe">
-          {/* Multiple file attachments preview */}
-          {attachedFiles.length > 0 && (
-            <div className={`mb-3 p-3 rounded-lg border ${
-              isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'
-            }`}>
-              <div className="flex flex-wrap gap-2">
-                {attachedFiles.map((attachedFile, index) => (
-                  <div key={index} className="flex items-center space-x-2 bg-white/10 rounded-lg p-2 relative group">
-                    {attachedFile.type === 'image' && attachedFile.preview ? (
-                      <img 
-                        src={attachedFile.preview} 
-                        alt="Preview" 
-                        className="w-10 h-10 rounded object-cover"
-                      />
-                    ) : (
-                      <div className={`w-10 h-10 rounded flex items-center justify-center ${
-                        isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
-                      }`}>
-                        {React.createElement(getFileIcon(attachedFile.type), { 
-                          size: 16, 
-                          className: isDarkMode ? 'text-gray-300' : 'text-gray-600' 
-                        })}
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className={`text-xs font-medium truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {attachedFile.file.name}
-                      </p>
-                      <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {(attachedFile.file.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => removeAttachment(index)}
-                      className={`absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center transition-colors duration-200 ${
-                        isDarkMode ? 'bg-gray-600 hover:bg-red-600 text-gray-300 hover:text-white' : 'bg-gray-300 hover:bg-red-500 text-gray-600 hover:text-white'
-                      }`}
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
+
+        {/* Floating Input Area - Always Visible */}
+        <div className={`${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+          {/* Dynamic Contextual Suggestions */}
+          {contextualSuggestions.length > 0 && (
+            <div className="max-w-4xl mx-auto px-6 pt-3">
+              <div className="flex justify-end gap-2 mb-3">
+                {contextualSuggestions.slice(0, 2).map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    className={`px-3 py-1.5 rounded-full text-sm transition-all duration-200 hover:scale-105 ${
+                      isDarkMode 
+                        ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700' 
+                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200'
+                    }`}
+                  >
+                    {suggestion}
+                  </button>
                 ))}
               </div>
             </div>
           )}
           
-          <div className="relative flex items-center">
-            <input
-              ref={fileInputRef}
-              type="file"
-              onChange={handleFileInputChange}
-              className="hidden"
-              accept="image/*,.pdf,.doc,.docx,.txt"
-              multiple
-            />
-            <div className={`flex items-center space-x-2 flex-1 px-3 py-3 rounded-xl border transition-colors duration-200 ${
-              isDarkMode 
-                ? 'bg-gray-800 border-gray-700' 
-                : 'bg-gray-50 border-gray-200'
-            }`}>
-              <button 
-                onClick={handleFileInputClick}
-                className={`p-2 rounded-lg transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
-                isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
-              }`}
-                title="Attach file"
-              >
-                <Paperclip size={18} />
-              </button>
-              
-              <textarea
-                ref={textareaRef}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className={`flex-1 resize-none bg-transparent border-none outline-none text-base ${
-                  isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
-                }`}
-                rows={1}
-                style={{ maxHeight: '120px', fontSize: '16px' }}
+          <div className="max-w-4xl mx-auto p-6 pb-safe">
+            {/* File Attachments Preview */}
+            {attachedFiles.length > 0 && (
+              <div className="mb-4">
+                <div className="flex flex-wrap gap-2">
+                  {attachedFiles.map((attachedFile, index) => (
+                    <div key={index} className="flex items-center space-x-2 relative group">
+                      {attachedFile.type === 'image' && attachedFile.preview ? (
+                        <img 
+                          src={attachedFile.preview} 
+                          alt="Preview" 
+                          className="w-10 h-10 rounded-lg object-cover"
+                        />
+                      ) : (
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                          isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                        }`}>
+                          {React.createElement(getFileIcon(attachedFile.type), { 
+                            size: 16, 
+                            className: isDarkMode ? 'text-gray-300' : 'text-gray-600' 
+                          })}
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-xs font-medium truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                          {attachedFile.file.name}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removeAttachment(index)}
+                        className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-200 ${
+                          isDarkMode ? 'bg-gray-600 hover:bg-red-600 text-gray-300 hover:text-white' : 'bg-gray-300 hover:bg-red-500 text-gray-600 hover:text-white'
+                        }`}
+                      >
+                        <X size={10} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Input Field */}
+            <div className="relative flex items-center">
+              <input
+                ref={fileInputRef}
+                type="file"
+                onChange={handleFileInputChange}
+                className="hidden"
+                accept="image/*,.pdf,.doc,.docx,.txt"
+                multiple
               />
-              
-              <div className="flex items-center space-x-1">
-                <button
-                  onClick={toggleListening}
-                  className={`p-2 rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
-                    isListening
-                      ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
-                      : isDarkMode 
-                        ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
-                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
-                  }`}
-                  title={isListening ? 'Stop listening' : 'Start voice input'}
+              <div className={`flex items-center space-x-3 flex-1 px-4 py-3 rounded-2xl border transition-all duration-200 ${
+                isDarkMode 
+                  ? 'bg-gray-800 border-gray-700' 
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
+                <button 
+                  onClick={handleFileInputClick}
+                  className={`p-2 rounded-xl transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                  isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
+                }`}
+                  title="Attach file"
                 >
-                  {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                  <Paperclip size={18} />
                 </button>
                 
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!message.trim() || isTyping}
-                  className={`p-2 rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
-                    message.trim() && !isTyping
-                      ? isDarkMode 
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
-                      : isDarkMode 
-                        ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
-                        : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+                <textarea
+                  ref={textareaRef}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Type your message..."
+                  className={`flex-1 resize-none bg-transparent border-none outline-none text-sm leading-relaxed ${
+                    isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
                   }`}
-                  title="Send message"
-                >
-                  <ArrowUp size={18} />
-                </button>
+                  rows={1}
+                  style={{ maxHeight: '120px', fontSize: '16px' }}
+                />
+                
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={toggleListening}
+                    className={`p-2 rounded-xl transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                      isListening
+                        ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
+                        : isDarkMode 
+                          ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
+                          : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
+                    }`}
+                    title={isListening ? 'Stop listening' : 'Start voice input'}
+                  >
+                    {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                  </button>
+                  
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!message.trim() || isTyping}
+                    className={`p-2 rounded-xl transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                      message.trim() && !isTyping
+                        ? isDarkMode 
+                          ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg' 
+                          : 'bg-blue-500 hover:bg-blue-600 text-white shadow-lg'
+                        : isDarkMode 
+                          ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
+                          : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+                    }`}
+                    title="Send message"
+                  >
+                    <ArrowUp size={18} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
