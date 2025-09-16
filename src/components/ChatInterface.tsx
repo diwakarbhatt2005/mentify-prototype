@@ -656,7 +656,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                   How can I help you today?
                 </h1>
                 <p className={`text-sm sm:text-base mb-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  I'm {selectedModel}, your AI assistant. I can help with writing, analysis, coding, creative tasks, and much more.
+                  I'm {selectedModel}, your AI assistant ready to help with any task.
                 </p>
                 
                 {/* Modern Suggestion Cards */}
@@ -893,7 +893,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
             )}
             
             {/* Input Field */}
-            <div className="relative flex items-center">
+            <div className="relative">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -902,14 +902,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                 accept="image/*,.pdf,.doc,.docx,.txt"
                 multiple
               />
-              <div className={`flex items-center space-x-3 flex-1 px-4 py-3 rounded-2xl border transition-all duration-200 ${
-                isDarkMode 
-                  ? 'bg-gray-800 border-gray-700' 
-                  : 'bg-gray-50 border-gray-200'
-              }`}>
+              
+              <div className="flex items-center space-x-2">
                 <button 
                   onClick={handleFileInputClick}
-                  className={`p-2 rounded-xl transition-colors duration-200 ${
+                  className={`p-2 rounded-lg transition-colors duration-200 ${
                   isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
                 }`}
                   title="Attach file"
@@ -923,45 +920,45 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Type your message..."
-                  className={`flex-1 resize-none bg-transparent border-none outline-none text-sm leading-relaxed ${
-                    isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
-                  }`}
+                  className={`flex-1 resize-none px-4 py-3 rounded-2xl border text-sm leading-relaxed transition-all duration-200 ${
+                    isDarkMode 
+                      ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' 
+                      : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                   rows={1}
                   style={{ maxHeight: '120px', fontSize: '16px' }}
                 />
                 
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={toggleListening}
-                    className={`p-2 rounded-xl transition-all duration-200 ${
-                      isListening
-                        ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
-                        : isDarkMode 
-                          ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
-                          : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
-                    }`}
-                    title={isListening ? 'Stop listening' : 'Start voice input'}
-                  >
-                    {isListening ? <MicOff size={18} /> : <Mic size={18} />}
-                  </button>
-                  
-                  <button
-                    onClick={handleSendMessage}
-                    disabled={!message.trim() || isTyping}
-                    className={`p-2 rounded-xl transition-all duration-200 ${
-                      message.trim() && !isTyping
-                        ? isDarkMode 
-                          ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                          : 'bg-blue-500 hover:bg-blue-600 text-white'
-                        : isDarkMode 
-                          ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
-                          : 'bg-gray-300 text-gray-400 cursor-not-allowed'
-                    }`}
-                    title="Send message"
-                  >
-                    <ArrowUp size={18} />
-                  </button>
-                </div>
+                <button
+                  onClick={toggleListening}
+                  className={`p-2 rounded-lg transition-all duration-200 ${
+                    isListening
+                      ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
+                      : isDarkMode 
+                        ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
+                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
+                  }`}
+                  title={isListening ? 'Stop listening' : 'Start voice input'}
+                >
+                  {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                </button>
+                
+                <button
+                  onClick={handleSendMessage}
+                  disabled={!message.trim() || isTyping}
+                  className={`p-2 rounded-lg transition-all duration-200 ${
+                    message.trim() && !isTyping
+                      ? isDarkMode 
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                        : 'bg-blue-500 hover:bg-blue-600 text-white'
+                      : isDarkMode 
+                        ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
+                        : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+                  }`}
+                  title="Send message"
+                >
+                  <ArrowUp size={18} />
+                </button>
               </div>
             </div>
           </div>
