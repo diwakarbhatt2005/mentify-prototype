@@ -707,6 +707,118 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
                     );
                   })}
                 </div>
+                
+                {/* Input Field - Direct in welcome section */}
+                <div className="w-full max-w-2xl mx-auto">
+                  {/* File Attachments Preview */}
+                  {attachedFiles.length > 0 && (
+                    <div className="mb-3">
+                      <div className="flex flex-wrap gap-2">
+                        {attachedFiles.map((attachedFile, index) => (
+                          <div key={index} className="flex items-center space-x-2 relative group">
+                            {attachedFile.type === 'image' && attachedFile.preview ? (
+                              <img 
+                                src={attachedFile.preview} 
+                                alt="Preview" 
+                                className="w-10 h-10 rounded-lg object-cover"
+                              />
+                            ) : (
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                                isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                              }`}>
+                                {React.createElement(getFileIcon(attachedFile.type), { 
+                                  size: 16, 
+                                  className: isDarkMode ? 'text-gray-300' : 'text-gray-600' 
+                                })}
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className={`text-xs font-medium truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                {attachedFile.file.name}
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => removeAttachment(index)}
+                              className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-200 ${
+                                isDarkMode ? 'bg-gray-600 hover:bg-red-600 text-gray-300 hover:text-white' : 'bg-gray-300 hover:bg-red-500 text-gray-600 hover:text-white'
+                              }`}
+                            >
+                              <X size={10} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Input Field */}
+                  <div className="flex items-center space-x-2">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      onChange={handleFileInputChange}
+                      className="hidden"
+                      accept="image/*,.pdf,.doc,.docx,.txt"
+                      multiple
+                    />
+                    
+                    <button 
+                      onClick={handleFileInputClick}
+                      className={`p-2 rounded-lg transition-colors duration-200 ${
+                      isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
+                    }`}
+                      title="Attach file"
+                    >
+                      <Paperclip size={18} />
+                    </button>
+                    
+                    <textarea
+                      ref={textareaRef}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Type your message..."
+                      className={`flex-1 resize-none px-4 py-3 rounded-2xl border text-sm leading-relaxed transition-all duration-200 ${
+                        isDarkMode 
+                          ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' 
+                          : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                      } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                      rows={1}
+                      style={{ maxHeight: '120px', fontSize: '16px' }}
+                    />
+                    
+                    <button
+                      onClick={toggleListening}
+                      className={`p-2 rounded-lg transition-all duration-200 ${
+                        isListening
+                          ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
+                          : isDarkMode 
+                            ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
+                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
+                      }`}
+                      title={isListening ? 'Stop listening' : 'Start voice input'}
+                    >
+                      {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                    </button>
+                    
+                    <button
+                      onClick={handleSendMessage}
+                      disabled={!message.trim() || isTyping}
+                      className={`p-2 rounded-lg transition-all duration-200 ${
+                        message.trim() && !isTyping
+                          ? isDarkMode 
+                            ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                            : 'bg-blue-500 hover:bg-blue-600 text-white'
+                          : isDarkMode 
+                            ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
+                            : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+                      }`}
+                      title="Send message"
+                    >
+                      <ArrowUp size={18} />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -847,122 +959,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isDarkMode, selectedModel
             </div>
           </div>
         )}
-
-        {/* Fixed Input Area - Always Visible */}
-        <div className={`border-t ${isDarkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'} p-4`}>
-          <div className="w-full max-w-4xl mx-auto">
-            {/* File Attachments Preview */}
-            {attachedFiles.length > 0 && (
-              <div className="mb-3">
-                <div className="flex flex-wrap gap-2">
-                  {attachedFiles.map((attachedFile, index) => (
-                    <div key={index} className="flex items-center space-x-2 relative group">
-                      {attachedFile.type === 'image' && attachedFile.preview ? (
-                        <img 
-                          src={attachedFile.preview} 
-                          alt="Preview" 
-                          className="w-10 h-10 rounded-lg object-cover"
-                        />
-                      ) : (
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
-                        }`}>
-                          {React.createElement(getFileIcon(attachedFile.type), { 
-                            size: 16, 
-                            className: isDarkMode ? 'text-gray-300' : 'text-gray-600' 
-                          })}
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-xs font-medium truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                          {attachedFile.file.name}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => removeAttachment(index)}
-                        className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-200 ${
-                          isDarkMode ? 'bg-gray-600 hover:bg-red-600 text-gray-300 hover:text-white' : 'bg-gray-300 hover:bg-red-500 text-gray-600 hover:text-white'
-                        }`}
-                      >
-                        <X size={10} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {/* Input Field */}
-            <div className="relative">
-              <input
-                ref={fileInputRef}
-                type="file"
-                onChange={handleFileInputChange}
-                className="hidden"
-                accept="image/*,.pdf,.doc,.docx,.txt"
-                multiple
-              />
-              
-              <div className="flex items-center space-x-2">
-                <button 
-                  onClick={handleFileInputClick}
-                  className={`p-2 rounded-lg transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
-                }`}
-                  title="Attach file"
-                >
-                  <Paperclip size={18} />
-                </button>
-                
-                <textarea
-                  ref={textareaRef}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Type your message..."
-                  className={`flex-1 resize-none px-4 py-3 rounded-2xl border text-sm leading-relaxed transition-all duration-200 ${
-                    isDarkMode 
-                      ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' 
-                      : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
-                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                  rows={1}
-                  style={{ maxHeight: '120px', fontSize: '16px' }}
-                />
-                
-                <button
-                  onClick={toggleListening}
-                  className={`p-2 rounded-lg transition-all duration-200 ${
-                    isListening
-                      ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
-                      : isDarkMode 
-                        ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
-                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
-                  }`}
-                  title={isListening ? 'Stop listening' : 'Start voice input'}
-                >
-                  {isListening ? <MicOff size={18} /> : <Mic size={18} />}
-                </button>
-                
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!message.trim() || isTyping}
-                  className={`p-2 rounded-lg transition-all duration-200 ${
-                    message.trim() && !isTyping
-                      ? isDarkMode 
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
-                      : isDarkMode 
-                        ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
-                        : 'bg-gray-300 text-gray-400 cursor-not-allowed'
-                  }`}
-                  title="Send message"
-                >
-                  <ArrowUp size={18} />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
